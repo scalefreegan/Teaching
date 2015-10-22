@@ -26,7 +26,8 @@ library(parallel)
 options(mc.cores = 24)
 
 # Dir infos ---------------------------------------------------
-BASEDIR = "/Users/brooks/Documents/Teaching/DataIntegration/data"
+FDIR = "https://oc.embl.de/index.php/s/qiOSCyvYRdxraRw/download?path=%2F&files="
+GITHUBDIR =
 
 # Read ---------------------------------------------------
 
@@ -100,8 +101,15 @@ f_names = c(
   "TM"
   )
 
-data_full = readData(f_full, f_names)
+f_data = file.path(BASEDIR, "data.rda")
+if (!curl::url.exists(f_data) {
+  data_full = readData(f_full, f_names)
 
-data_reduced = readData(f_reduced, f_names)
+  data_reduced = readData(f_reduced, f_names)
 
-save(data_full, data_reduced, file = file.path(BASEDIR, "data.rda"))
+  save(data_full, data_reduced, file = f_data)
+} else {
+  load(url(f_data))
+}
+
+# Characterize data ---------------------------------------------------

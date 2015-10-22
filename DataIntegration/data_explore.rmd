@@ -1,0 +1,24 @@
+---
+title: "Data Integration Course"
+author: "Aaron Brooks"
+date: "October 22, 2015"
+output: html_document
+---
+
+Basic exploration of data sent by Jean-Karim for Data Integration course at EMBL Dec 2015
+
+Data available at: https://oc.embl.de/index.php/s/qiOSCyvYRdxraRw
+
+I wrote a custom script to process these data:
+
+```{r}
+devtools::source_url("https://raw.githubusercontent.com/scalefreegan/Teaching/master/DataIntegration/readData.R")
+```
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
