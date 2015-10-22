@@ -15,10 +15,9 @@ I wrote a custom script to process these data:
 devtools::source_url("https://raw.githubusercontent.com/scalefreegan/Teaching/master/DataIntegration/readData.R")
 ```
 
-You can also embed plots, for example:
+For the examples, we will only use the reduced data set. It looks like this:
 
-```{r, echo=FALSE}
-plot(cars)
+```{r}
+head(data_reduced)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

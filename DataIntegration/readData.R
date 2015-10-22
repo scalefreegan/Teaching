@@ -27,18 +27,18 @@ options(mc.cores = 24)
 
 # Dir infos ---------------------------------------------------
 FDIR = "https://oc.embl.de/index.php/s/qiOSCyvYRdxraRw/download?path=%2F&files="
-GITHUBDIR =
+GITHUBDIR = "https://github.com/scalefreegan/Teaching/raw/master/DataIntegration/"
 
 # Read ---------------------------------------------------
 
-readData = function(f, fnames) {
+readData = function(f, fnames, URL) {
   # f is vector of file paths
   # fnames is vector of names for theses files in final data.frame
   # Data files are 3 column, tab-delimited, gene1:gene2:score
   pb <- txtProgressBar(min = 0, max = length(f), style = 3)
   o = lapply(seq(1,length(f)),function(i){
       setTxtProgressBar(pb, i)
-      d = read.table(file.path(BASEDIR, f[i]), sep = "\t", stringsAsFactors = F)
+      d = read.table(url(paste(FDIR,f[i],sep=""), method = "libcurl"), sep = "\t", stringsAsFactors = F)
       if (ncol(d) == 2) {
         d = cbind(d,1)
       }
@@ -101,15 +101,12 @@ f_names = c(
   "TM"
   )
 
-f_data = file.path(BASEDIR, "data.rda")
-if (!curl::url.exists(f_data) {
+f_data = paste(GITHUBDIR, "data.rda", sep="")
+if (!httr::url_success(f_data)) {
   data_full = readData(f_full, f_names)
-
   data_reduced = readData(f_reduced, f_names)
-
-  save(data_full, data_reduced, file = f_data)
 } else {
-  load(url(f_data))
+  load(url(f_data, method = "curl"))
 }
 
 # Characterize data ---------------------------------------------------
