@@ -64,20 +64,25 @@ selectInput(inputId = "datatype2", label = "Select data type:", choices = colnam
 ```
 
 ```{r echo = FALSE}
- #renderPlotly({
- renderPlot({
+ renderPlotly({
+ #renderPlot({
    d = input$datatype2
    z = select(data, gene1, gene2, which(colnames(data)==d))
    z[is.na(z[,d]),d] = 0
-   g = seq(1:length(unique(c(z$gene1, z$gene2))))
-   names(g) = sort(unique(c(z$gene1, z$gene2)))
-   m = matrix(0, nrow = length(g),ncol = length(g), dimnames = list(names(g),names(g)))
-   m[g[z$gene1], g[z$gene2]] = z[,d]
-   m[g[z$gene2], g[z$gene1]] = z[,d]
-   m = m[1:500,1:500]
-   #p <- plot_ly(z = m, type = "heatmap", filename="r-docs/basic-heatmap")
-   #p
-   pheatmap(m)
+   g = sort(unique(c(z$gene1, z$gene2)))
+   m = matrix(0, nrow = length(g),ncol = length(g), dimnames = list(g,g))
+   m[cbind(z$gene1, z$gene2)] = z[,d]
+   m[cbind(z$gene2, z$gene1)] = z[,d]
+   rk = which(apply(m,1,function(i)sum(i)>0))
+   ck = which(apply(m,2,function(i)sum(i)>0))
+   k = intersect(rk,ck)
+   m = m[k,k]
+   m_clustx = hclust( dist( m ) )
+   m_clusty = hclust( dist( t( m ) ) )
+   x = m_clustx$labels[m_clustx$order]
+   y = m_clusty$labels[m_clusty$order]
+   p <- plot_ly(z = m[x,y], x = x, y = y, colorscale = "Jet", zauto = F, zmin = 0, zmax = quantile(m[m>0],.9), type = "heatmap", filename="r-docs/basic-heatmap")
+   p
  })
 ```
 
