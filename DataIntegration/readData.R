@@ -55,7 +55,7 @@ readData = function(f, fnames, URL) {
   if (length(o) > 1) {
     for (i in 2:length(o)) {
       #print(i)
-      out = merge(out, o[[i]], by = "genes", all = TRUE)
+      out = merge(out, o[[i]], by = "genes", all = TRUE, , stringsAsFactors = F)
     }
   }
   # clean up non-symmetric entries
@@ -70,7 +70,7 @@ readData = function(f, fnames, URL) {
   }
   # split genes into gene1 gene2
   tor = do.call(rbind, strsplit(out$genes, split = "_"))
-  tor = cbind(tor, out[, 2:dim(out)[2]])
+  tor = cbind(tor, out[, 2:dim(out)[2]],stringsAsFactors = F)
   colnames(tor)[1:2] = c("gene1", "gene2")
   close(pb)
   return(tor)

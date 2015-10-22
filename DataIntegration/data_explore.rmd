@@ -1,9 +1,19 @@
 ---
-title: "Data Integration Course"
+title: "Data Integration Course: Data Exploration"
 author: "Aaron Brooks"
 date: "October 22, 2015"
 output: html_document
+runtime: shiny
 ---
+
+```{r echo = FALSE, message = FALSE, cache = FALSE}
+library(pheatmap)
+library(plotly)
+library(dplyr)
+library(reshape2)
+```
+
+## Why?
 
 Basic exploration of data sent by Jean-Karim for Data Integration course at EMBL Dec 2015
 
@@ -11,13 +21,64 @@ Data available at: https://oc.embl.de/index.php/s/qiOSCyvYRdxraRw
 
 I wrote a custom script to process these data:
 
-```{r}
+```{r echo = TRUE, message = FALSE, cache = TRUE}
 devtools::source_url("https://raw.githubusercontent.com/scalefreegan/Teaching/master/DataIntegration/readData.R")
 ```
+
+## What does the data look like?
 
 For the examples, we will only use the reduced data set. It looks like this:
 
 ```{r}
-head(data_reduced)
+data = data_reduced
+
+head(data)
 ```
+
+## Data set info
+
+The data sets are: 
+
+* __BP__: Pairwise gene semantic similarities (Resnik score) in the biological process domain
+* __CODA80__: Predicted protein interactions from domain co-occurrence/fusion events
+* __HIPPO__: Protein interactions transferred from model organisms to human by orthology
+* __PI__: Protein interactions in human (from multiple databases)
+* __TM__: Protein interactions derived from the [iHOP](http://www.ihop-net.org/UniPub/iHOP/help.html) text mining method
+
+The data set is sparse. In fact, there are `r sum(complete.cases(data_reduced))` complete cases across the entire data set! 
+
+### Below you can compute the number of complete cases for each data type.
+
+```{r echo = FALSE}
+checkboxGroupInput(inputId = "datatype1", label = "Select data type:", choices = colnames(data)[-c(1,2)], inline = T)
+```
+
+```{r echo = FALSE}
+renderText({ paste("There are", sum(complete.cases(data[input$datatype1])), "complete cases across these data sets", sep= " " )})
+```
+
+## Visualize the data
+
+```{r echo = FALSE}
+selectInput(inputId = "datatype2", label = "Select data type:", choices = colnames(data_reduced)[-c(1,2)], selected = 1)
+```
+
+```{r echo = FALSE}
+ #renderPlotly({
+ renderPlot({
+   d = input$datatype2
+   z = select(data, gene1, gene2, which(colnames(data)==d))
+   z[is.na(z[,d]),d] = 0
+   g = seq(1:length(unique(c(z$gene1, z$gene2))))
+   names(g) = sort(unique(c(z$gene1, z$gene2)))
+   m = matrix(0, nrow = length(g),ncol = length(g), dimnames = list(names(g),names(g)))
+   m[g[z$gene1], g[z$gene2]] = z[,d]
+   m[g[z$gene2], g[z$gene1]] = z[,d]
+   m = m[1:500,1:500]
+   #p <- plot_ly(z = m, type = "heatmap", filename="r-docs/basic-heatmap")
+   #p
+   pheatmap(m)
+ })
+```
+
 
