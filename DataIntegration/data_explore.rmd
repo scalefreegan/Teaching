@@ -11,6 +11,7 @@ library(pheatmap)
 library(plotly)
 library(dplyr)
 library(reshape2)
+library(kernlab)
 ```
 
 ## Why?
@@ -19,9 +20,9 @@ Basic exploration of data sent by Jean-Karim for Data Integration course at EMBL
 
 Data available at: https://oc.embl.de/index.php/s/qiOSCyvYRdxraRw
 
-I wrote a custom script to process these data:
+I wrote a script to process these data:
 
-```{r echo = TRUE, message = FALSE, cache = TRUE}
+```{r echo = TRUE, message = FALSE, cache = FALSE}
 devtools::source_url("https://raw.githubusercontent.com/scalefreegan/Teaching/master/DataIntegration/readData.R")
 ```
 
@@ -60,19 +61,27 @@ renderText({ paste("There are", sum(complete.cases(data[input$datatype1])), "com
 ## Visualize the data
 
 ```{r echo = FALSE}
-selectInput(inputId = "datatype2", label = "Select data type:", choices = colnames(data_reduced)[-c(1,2)], selected = 1)
+selectInput(inputId = "datatype2", label = "Select data type:", choices = c(colnames(data_reduced)[-c(1,2)],"Combined"), selected = 1)
 ```
 
 ```{r echo = FALSE}
  renderPlotly({
- #renderPlot({
    d = input$datatype2
-   z = select(data, gene1, gene2, which(colnames(data)==d))
-   z[is.na(z[,d]),d] = 0
-   g = sort(unique(c(z$gene1, z$gene2)))
-   m = matrix(0, nrow = length(g),ncol = length(g), dimnames = list(g,g))
-   m[cbind(z$gene1, z$gene2)] = z[,d]
-   m[cbind(z$gene2, z$gene1)] = z[,d]
+   if (d == "Combined") {
+     z = select(data, gene1, gene2)
+     z$value = rowSums(data[,-c(1,2)],na.rm=T)
+     g = sort(unique(c(z$gene1, z$gene2)))
+     m = matrix(0, nrow = length(g),ncol = length(g), dimnames = list(g,g))
+     m[cbind(z$gene1, z$gene2)] = z[,"value"]
+     m[cbind(z$gene2, z$gene1)] = z[,"value"]
+   } else {
+     z = select(data, gene1, gene2, which(colnames(data)==d))
+     z[is.na(z[,d]),d] = 0
+     g = sort(unique(c(z$gene1, z$gene2)))
+     m = matrix(0, nrow = length(g),ncol = length(g), dimnames = list(g,g))
+     m[cbind(z$gene1, z$gene2)] = z[,d]
+     m[cbind(z$gene2, z$gene1)] = z[,d]
+   }
    rk = which(apply(m,1,function(i)sum(i)>0))
    ck = which(apply(m,2,function(i)sum(i)>0))
    k = intersect(rk,ck)
@@ -81,9 +90,8 @@ selectInput(inputId = "datatype2", label = "Select data type:", choices = colnam
    m_clusty = hclust( dist( t( m ) ) )
    x = m_clustx$labels[m_clustx$order]
    y = m_clusty$labels[m_clusty$order]
-   p <- plot_ly(z = m[x,y], x = x, y = y, colorscale = "Jet", zauto = F, zmin = 0, zmax = quantile(m[m>0],.9), type = "heatmap", filename="r-docs/basic-heatmap")
+   p <- plot_ly(z = m[x,y], x = x, y = y, colorscale = "Greys", reversescale =T, zauto = F, zmin = 0, zmax = quantile(m[m>0],.9), type = "heatmap", filename="data")
    p
  })
 ```
-
 

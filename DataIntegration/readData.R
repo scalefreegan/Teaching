@@ -21,9 +21,6 @@ library(ggplot2)
 #library(plotly)
 library(dplyr)
 library(reshape2)
-library(LSD)
-library(parallel)
-options(mc.cores = 24)
 
 # Dir infos ---------------------------------------------------
 FDIR = "https://oc.embl.de/index.php/s/qiOSCyvYRdxraRw/download?path=%2F&files="
