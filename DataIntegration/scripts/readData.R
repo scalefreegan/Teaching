@@ -23,7 +23,7 @@ library(reshape2)
 
 # Dir infos ---------------------------------------------------
 FDIR = "https://oc.embl.de/index.php/s/qiOSCyvYRdxraRw/download?path=%2F&files="
-GITHUBDIR = "https://github.com/scalefreegan/Teaching/raw/master/DataIntegration/"
+GITHUBDIR = "https://github.com/scalefreegan/Teaching/raw/master/DataIntegration/data/"
 
 # Read ---------------------------------------------------
 

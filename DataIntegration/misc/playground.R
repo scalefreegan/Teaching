@@ -1,9 +1,6 @@
 library(pheatmap)
-library(plotly)
 library(dplyr)
 library(reshape2)
-library(kernlab)
-library(matrixcalc)
 library(igraph)
 library(linkcomm)
 
@@ -66,4 +63,4 @@ mc_edge = as_edgelist(g)
 mc_edge = data.frame(node1 = mc_edge[,1], node2 = mc_edge[,2], weight = E(g)$weight)
 g_linkcomm = getLinkCommunities(mc_edge, directed = FALSE)
 
-save(ms, mc, g, mc_edge, g_linkcomm file="~/Documents/Teaching/DataIntegration/lab.rda")
+save(ms, mc, g, mc_edge, g_linkcomm, file="~/Documents/Teaching/DataIntegration/lab.rda")
