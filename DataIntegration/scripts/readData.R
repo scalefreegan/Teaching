@@ -1,6 +1,6 @@
 #! /usr/bin/env Rscript
 # designed to be opened as
-# devtools::source_url("https://raw.githubusercontent.com/scalefreegan/Teaching/master/DataIntegration/readData.R")
+# devtools::source_url("https://raw.githubusercontent.com/scalefreegan/Teaching/master/DataIntegration/scripts/readData.R")
 #-------------------------------------------------------------------#
 # Process Course Data Jean-Karim on 20.10.2015
 # ! Transform into a computable format !
@@ -99,7 +99,8 @@ f_names = c(
 
 f_data = paste(GITHUBDIR, "data.rda", sep="")
 if (!httr::url_success(f_data)) {
-  data_full = readData(f_full, f_names)
+  #data_full = readData(f_full, f_names)
+  # data_reduced = readData(f_reduced, f_names)
   data_reduced = readData(f_reduced, f_names)
 } else {
   # why not update?
