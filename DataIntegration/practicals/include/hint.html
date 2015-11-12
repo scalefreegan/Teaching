@@ -1,0 +1,12 @@
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script>
+  $(document).ready(function(){
+  $('#hint > h5').css('cursor','pointer');
+  $('#hint > h5').nextUntil("h5").slideToggle();
+  $('#hint > h5').click(function() {
+    $(this).nextUntil("h5").slideToggle();
+    $(this).toggleClass('ui-closed ui-open');
+    });
+  });
+</script>
+

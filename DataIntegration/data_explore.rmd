@@ -95,3 +95,8 @@ selectInput(inputId = "datatype2", label = "Select data type:", choices = c(coln
  })
 ```
 
+## Normalize matrices
+
+
+
+

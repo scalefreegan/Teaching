@@ -6,7 +6,7 @@
 
 ##### 130 min lecture / 110 min lab (4 hrs total)
 
-#### 1. Intro to clustering (20 min lecture, 15 min lab)
+#### 1. Intro to clustering (20 min lecture, 25 min lab)
 
 **Lecture**
 
@@ -52,7 +52,7 @@
 
   * Understand how use and interpret the results
 
-#### 3. Cluster analysis (30 min lecture, 30 min lab)
+#### 3. Cluster analysis (30 min lecture, 20 min lab)
 
 **Lecture**
 

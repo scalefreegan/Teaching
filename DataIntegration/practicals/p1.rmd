@@ -1,0 +1,95 @@
+---
+title: "Practical 1: Introduction"
+subtitle: "EMBL Course: Data mining and integration with networks"
+author: "Aaron Brooks"
+date: "This should take about 25 minutes"
+output: 
+  html_document:
+    css: include/hint.css
+    includes:
+      in_header: include/hint.html
+    toc: true
+    toc_depth: 2
+---
+
+# Introduction to Clustering
+
+Welcome to the first practical lesson for the **clustering** section of the EMBL course: *Data mining and integration with networks*. 
+
+This document will introduce basic concepts related to clustering and provide a gentle introduction to clustering with a simple example. At the end of the practical we will read and process Jean-Karim's kernels so that they are ready to analyze in the subsequent tutorials.
+
+# Format of the practicals
+
+First, a word about the format of these practicals. 
+
+The practicals are designed to allow self-guided exploration of the course materials. Each practical is paired with information from the preceeding lecture. You should be able to explore this document at your own pace and even refer to it again in the future. 
+
+In addition to the text, be on the lookout for three special formats in these documents. These sections include scripts, excercises and solutions, respectively.   
+
+**Scripts**
+
+Scripts are denoted by blocked text. You can copy and paste these commands into the R terminal. Give the command below a try. 
+
+```{r, eval=FALSE}
+cat("Welcome to the course on clustering\n")
+```
+
+**Excercises**
+
+Throughout the practical you will be asked to evaluate your understanding by writing code. You should solve these excercise by writing your own script to perform the requested operations or answer the question. Excercises are denoted by blocked quotation, as below.
+
+> This is an excercise.
+>
+> You should write your own code to solve it.
+
+**Solutions**
+
+If you get stuck and/or to see the answer I generated, use the **solution** pulldown to reveal the answer to the problem, including accompanying code.
+
+The solution pulldowns look like this. Give the one below a try:
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
+####"Do. Or do not. There is no try."
+
+![](http://a.dilcdn.com/bl/wp-content/uploads/sites/6/2013/11/01-400x225.jpg)
+</div>
+
+*Don't cheat (too much). These excercises are designed to make sure that you're keeping up. Give it a solid effort before revealing the answer. Yoda remembers...*
+
+# Requirements
+
+This tutorial requires a number of R packages. To install theses packages you can run:
+
+```{r, eval=FALSE}
+install.packages("devtools")
+devtools::source_url("https://raw.githubusercontent.com/scalefreegan/Teaching/master/DataIntegration/")
+```
+    
+All packages should be installed on the computers used in the Data Integration course. 
+
+# Clustering
+
+## Why cluster?
+
+## Simple clustering
+
+## More complicated clustering
+
+# Process kernel data
+
+As a final step, let's process Jean-Karim's similarity kernels. 
+
+To remind you, Jean-Karim has provided us with kernels for .
+
+Type   | Description
+-------|------------------------------------------------------------------------------------
+BP     | Pairwise gene semantic similarities (Resnik score) in the biological process domain
+CODA80 | Predicted protein interactions from domain co-occurrence/fusion events
+HIPPO  | Protein interactions transferred from model organisms to human by orthology
+PI     | Protein interactions in human (from multiple databases)
+TM     | Protein interactions derived from the iHOP text mining method
+
+We will combine each of these kernels into a single matrix (graph). It is on this combined graph that we will perform clustering. 
+
+

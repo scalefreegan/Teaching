@@ -1,0 +1,9 @@
+.ui-closed:before {
+  font-family:monospace;
+  content:"+ ";
+}
+
+.ui-open:before {
+  font-family:monospace;
+  content:"- ";
+}

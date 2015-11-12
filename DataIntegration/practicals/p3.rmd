@@ -1,0 +1,79 @@
+---
+title: "Practical 3: Cluster Detection"
+subtitle: "EMBL Course: Data mining and integration with networks"
+author: "Aaron Brooks"
+date: "December 11, 2015"
+output: 
+  html_document:
+    css: include/hint.css
+    includes:
+      in_header: include/hint.html
+    toc: true
+    toc_depth: 2
+---
+
+# Clustering Tutorial
+
+## Load Data 
+
+First we will read the kernel data from Jean-Karim. I have written a script to read and parse the results.
+
+```{r echo = TRUE, message = FALSE, cache = FALSE}
+devtools::source_url("https://raw.githubusercontent.com/scalefreegan/Teaching/master/DataIntegration/readData.R")
+```
+
+## Link-community detection
+
+Link-community detection inverts the clustering problem. Rather than cluster similar nodes, it instead clusters similar edges. 
+
+In link-community detection, nodes can now belong to several clusters. This is particularly useful in biological contexts, where one might like to express, for example, the different role a particular gene has in different contexts.
+
+You can learn more about link-community detection in the [original paper](http://www.nature.com/nature/journal/v466/n7307/full/nature09182.html)
+
+> This is a task.
+>
+> You should do 'X'.
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Hint</h5>
+```{r echo = TRUE, message = FALSE, cache = FALSE, id = "Mine"}
+library(pheatmap)
+library(plotly)
+library(dplyr)
+library(reshape2)
+library(kernlab)
+library(matrixcalc)
+library(igraph)
+library(linkcomm)
+
+devtools::source_url("https://raw.githubusercontent.com/scalefreegan/Teaching/master/DataIntegration/readData.R")
+
+data = data_reduced
+
+head(data)
+```
+</div>
+
+### Some in between stuff!
+
+#### even H5!
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Hint</h5>
+```{r echo = TRUE, message = FALSE, cache = FALSE, id = "Mine"}
+library(pheatmap)
+library(plotly)
+library(dplyr)
+library(reshape2)
+library(kernlab)
+library(matrixcalc)
+library(igraph)
+library(linkcomm)
+
+devtools::source_url("https://raw.githubusercontent.com/scalefreegan/Teaching/master/DataIntegration/readData.R")
+
+data = data_reduced
+
+head(data)
+```
+</div>
