@@ -12,6 +12,10 @@ output:
     toc_depth: 2
 ---
 
+```{r, echo = FALSE, message = FALSE}
+devtools::source_url("https://raw.githubusercontent.com/scalefreegan/Teaching/master/DataIntegration/scripts/readData.R")
+```
+
 # Introduction to Clustering
 
 Welcome to the first practical lesson for the **clustering** section of the EMBL course: *Data mining and integration with networks*. 
@@ -59,15 +63,15 @@ The solution pulldowns look like this. Give the one below a try:
 
 # Requirements
 
-This tutorial requires a number of R packages. To install theses packages you can run:
+This tutorial requires a number of R packages. To install theses packages you can run the script included below.
+
+*All packages should be installed on the computers used in the Data Integration course.*
 
 ```{r, eval=FALSE}
 install.packages("devtools")
-devtools::source_url("https://raw.githubusercontent.com/scalefreegan/Teaching/master/DataIntegration/")
+devtools::source_url("https://raw.githubusercontent.com/scalefreegan/Teaching/master/DataIntegration/scripts/installPackages.R")
 ```
     
-All packages should be installed on the computers used in the Data Integration course. 
-
 # Clustering
 
 ## Why cluster?
@@ -76,11 +80,11 @@ All packages should be installed on the computers used in the Data Integration c
 
 ## More complicated clustering
 
-# Process kernel data
+# Kernel data set
 
 As a final step, let's process Jean-Karim's similarity kernels. 
 
-To remind you, Jean-Karim has provided us with kernels for .
+To remind you, Jean-Karim has provided us with kernels for `r length(unique(c(data$gene1,data$gene2)))`.
 
 Type   | Description
 -------|------------------------------------------------------------------------------------
@@ -91,5 +95,15 @@ PI     | Protein interactions in human (from multiple databases)
 TM     | Protein interactions derived from the iHOP text mining method
 
 We will combine each of these kernels into a single matrix (graph). It is on this combined graph that we will perform clustering. 
+
+## Get data
+
+## Combine and normalize kernels
+
+## Make a graph
+
+```{r}
+library(igraph)
+```
 
 
