@@ -101,7 +101,7 @@ f_data = paste(GITHUBDIR, "data.rda", sep="")
 if (!httr::url_success(f_data)) {
   #data_full = readData(f_full, f_names)
   # data_reduced = readData(f_reduced, f_names)
-  data_reduced = readData(f_reduced, f_names)
+  data = readData(f_reduced, f_names)
 } else {
   # why not update?
   load(url(f_data, method = "libcurl"))

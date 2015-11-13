@@ -12,7 +12,7 @@ output:
     toc_depth: 2
 ---
 
-```{r, echo=FALSE}
+```{r, echo = FALSE, message = FALSE}
 devtools::source_url("https://raw.githubusercontent.com/scalefreegan/Teaching/master/DataIntegration/scripts/readData.R")
 ```
 
@@ -84,7 +84,7 @@ devtools::source_url("https://raw.githubusercontent.com/scalefreegan/Teaching/ma
 
 As a final step, let's process Jean-Karim's similarity kernels. 
 
-To remind you, Jean-Karim has provided us with kernels for .
+To remind you, Jean-Karim has provided us with kernels for `r length(unique(c(data$gene1,data$gene2)))`.
 
 Type   | Description
 -------|------------------------------------------------------------------------------------

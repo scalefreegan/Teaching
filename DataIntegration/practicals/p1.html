@@ -89,7 +89,11 @@ img {
 <li><a href="#simple-clustering">Simple clustering</a></li>
 <li><a href="#more-complicated-clustering">More complicated clustering</a></li>
 </ul></li>
-<li><a href="#process-kernel-data">Process kernel data</a></li>
+<li><a href="#kernel-data-set">Kernel data set</a><ul>
+<li><a href="#get-data">Get data</a></li>
+<li><a href="#combine-and-normalize-kernels">Combine and normalize kernels</a></li>
+<li><a href="#make-a-graph">Make a graph</a></li>
+</ul></li>
 </ul>
 </div>
 
@@ -126,10 +130,10 @@ Solution
 </div>
 <div id="requirements" class="section level1">
 <h1>Requirements</h1>
-<p>This tutorial requires a number of R packages. To install theses packages you can run:</p>
+<p>This tutorial requires a number of R packages. To install theses packages you can run the script included below.</p>
+<p><em>All packages should be installed on the computers used in the Data Integration course.</em></p>
 <pre class="r"><code>install.packages(&quot;devtools&quot;)
-devtools::source_url(&quot;https://raw.githubusercontent.com/scalefreegan/Teaching/master/DataIntegration/&quot;)</code></pre>
-<p>All packages should be installed on the computers used in the Data Integration course.</p>
+devtools::source_url(&quot;https://raw.githubusercontent.com/scalefreegan/Teaching/master/DataIntegration/scripts/installPackages.R&quot;)</code></pre>
 </div>
 <div id="clustering" class="section level1">
 <h1>Clustering</h1>
@@ -143,10 +147,10 @@ devtools::source_url(&quot;https://raw.githubusercontent.com/scalefreegan/Teachi
 <h2>More complicated clustering</h2>
 </div>
 </div>
-<div id="process-kernel-data" class="section level1">
-<h1>Process kernel data</h1>
+<div id="kernel-data-set" class="section level1">
+<h1>Kernel data set</h1>
 <p>As a final step, let’s process Jean-Karim’s similarity kernels.</p>
-<p>To remind you, Jean-Karim has provided us with kernels for .</p>
+<p>To remind you, Jean-Karim has provided us with kernels for 4567.</p>
 <table>
 <thead>
 <tr class="header">
@@ -178,6 +182,30 @@ devtools::source_url(&quot;https://raw.githubusercontent.com/scalefreegan/Teachi
 </tbody>
 </table>
 <p>We will combine each of these kernels into a single matrix (graph). It is on this combined graph that we will perform clustering.</p>
+<div id="get-data" class="section level2">
+<h2>Get data</h2>
+</div>
+<div id="combine-and-normalize-kernels" class="section level2">
+<h2>Combine and normalize kernels</h2>
+</div>
+<div id="make-a-graph" class="section level2">
+<h2>Make a graph</h2>
+<pre class="r"><code>library(igraph)</code></pre>
+<pre><code>## 
+## Attaching package: 'igraph'
+## 
+## The following objects are masked from 'package:dplyr':
+## 
+##     %&gt;%, as_data_frame, groups, union
+## 
+## The following objects are masked from 'package:stats':
+## 
+##     decompose, spectrum
+## 
+## The following object is masked from 'package:base':
+## 
+##     union</code></pre>
+</div>
 </div>
 
 
