@@ -47,10 +47,12 @@
 					</p>
 					<br>
 					<p>
-						<small>You can follow along at: <a href="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l3.html">github/DataIntegration</a></small>
+						<small>You can follow along at: <a href="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l2.html">github/DataIntegration</a></small>
 					</p>
 				</section>
-
+				<!--..................-->
+				<!--INTRO-->
+				<!--..................-->
 				<section id="goals">
 					<h2>Goals (60 min - 30 slides)</h2>
 					<ul>
@@ -61,12 +63,97 @@
 					</ul>
 				</section>
 
-				<section id="flavornetwork">
-					<h2>Flavor Network</h2>
-					<img height=500 data-src="resources/flavornetwork.jpg">
-					<small>Yong-Yeol et al (2011). <a href="http://www.nature.com/articles/srep00196">Flavor network and the principles of food pairing</a></small>
+				<section id="metric">
+					<h2>What is a metric?</h2>
+					<p>A nonnegative function g(x,y) describing the "distance" between neighboring points for a given set. A metric satisfies the triangle inequality</p>
+					<p class="fragment">$g(x,y) + g(y,z) \ge g(x,z)$</p>
+					<p class="fragment">$g(x,y) = g(y,x)$</p>
+					<p class="fragment">$g(x,x) = 0$</p>
 				</section>
 
+				<section id="metric">
+					<h2>A formalized way to detect “similar behavior” in data</h2>
+				</section>
+
+				<section id="uga">
+					<h2>Weighted Undirected Graph</h2>
+					<img height=500 data-src="resources/uga.png">
+					<p><small><a href="http://www.stoimen.com/blog/2012/08/31/computer-algorithms-graphs-and-their-representation/">stoimen.com</a></small></p>
+				</section>
+				<!--..................-->
+				<!--SPECTRAL CLUSTERING-->
+				<!--..................-->
+				<section id="spectral">
+					<h2>Spectral Clustering</h2>
+					<p>Some advantages</p>
+					<ol>
+						<li class="fragment">Can be solved efficiently by standard linear algebra software</li>
+						<li class="fragment">Often outperforms traditional clustering algorithms such as the k-means algorithm</li>
+					</ol>
+					<p><small>Luxburg (2007). <a href="http://www.stoimen.com/blog/2012/08/31/computer-algorithms-graphs-and-their-representation/">A Tutorial on Spectral Clustering</a></small></p>
+				</section>
+				<section id="laplacian">
+					<h2>Graph Laplacians</h2>
+					<p>$L = D − W$</p>
+					<img data-src="resources/laplacian.png">
+					<p><small>Wikipedia: <a href="https://en.wikipedia.org/wiki/Laplacian_matrix">Laplacian matrix</a></small></p>
+				</section>
+				<!--..................-->
+				<!--LINK COMMUNITY-->
+				<!--..................-->
+				<section id="linkcomm">
+					<h2>Link-community clustering</h2>
+					<img height=500 data-src="resources/linkcomm.png">
+					<p><small>Yong-Yeol et al (2010). <a href="http://www.nature.com/nature/journal/v466/n7307/full/nature09182.html">Link communities reveal multiscale complexity in networks</a></small></p>
+				</section>
+				<section id="linkcomm">
+					<h2>Link-community clustering</h2>
+					<img height=500 data-src="resources/linkcomm_score.png">
+					<p><small>Yong-Yeol et al (2010). <a href="http://www.nature.com/nature/journal/v466/n7307/full/nature09182.html">Link communities reveal multiscale complexity in networks</a></small></p>
+				</section>
+				<section id="linkcomm">
+					<h2>Link-community clustering</h2>
+					<img height=500 data-src="resources/linkcomm_hclust.png">
+					<p><small>Yong-Yeol et al (2010). <a href="http://www.nature.com/nature/journal/v466/n7307/full/nature09182.html">Link communities reveal multiscale complexity in networks</a></small></p>
+				</section>
+				<section>
+					<section id="examples">
+						<h2>Examples</h2>
+					</section>
+					<section id="flavornetwork">
+						<h2>Flavor Network</h2>
+						<img height=500 data-src="resources/flavornetwork.jpg">
+						<p><small>Yong-Yeol et al (2011). <a href="http://www.nature.com/articles/srep00196">Flavor network and the principles of food pairing</a></small></p>
+					</section>
+					<section id="flavornetwork">
+						<h2>EGRIN2.0</h2>
+						<h4>Gene co-regulation network</h4>
+						<img height=400 data-src="resources/network-01.png">
+						<p><small>Brooks and Reiss et al (2014). <a href="http://msb.embopress.org/cgi/pmidlookup?view=long&pmid=25028489">A system‐level model for the microbial regulatory genome</a></small></p>
+					</section>
+					<section id="flavornetwork">
+						<h3>Conditionally Co-regulated Modules (Corems)</h3>
+						<img height=450 data-src="resources/corem.png">
+						<p><small>Brooks and Reiss et al (2014). <a href="http://msb.embopress.org/cgi/pmidlookup?view=long&pmid=25028489">A system‐level model for the microbial regulatory genome</a></small></p>
+					</section>
+				</section>
+				<!--..................-->
+				<!--LAB INTRO-->
+				<!--..................-->
+				<section>
+					<section id="karimnetwork">
+						<h2>Kernel Network</h2>
+						<img height=500 data-src="resources/labgraph.png">
+						<p><small>For more info: <a href="http://scalefreegan.github.io/Teaching/DataIntegration/practicals/p1.html">Practical 1</a></small></p>
+					</section>
+					<section>
+						<h2>How to detect community structure?</h2>
+					</section>
+				</section>
+
+				<section>
+					<h1>Questions?</h1>
+				</section>
 
 			</div>
 
@@ -94,7 +181,8 @@
 					{ src: 'reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
 					{ src: 'reveal/plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
 					{ src: 'reveal/plugin/zoom-js/zoom.js', async: true },
-					{ src: 'reveal/plugin/notes/notes.js', async: true }
+					{ src: 'reveal/plugin/notes/notes.js', async: true },
+					{ src: 'reveal/plugin/math/math.js', async: true }
 				]
 			});
 
