@@ -78,13 +78,51 @@ devtools::source_url("https://raw.githubusercontent.com/scalefreegan/Teaching/ma
 
 ## Simple clustering
 
+At it simplest
+
+Some examples of 
+
+```{r, eval=TRUE}
+library(kernlab)
+data(spirals)
+```
+
 ## More complicated clustering
+
+If 
+
+> Plot the data `spirals`. You can load this data set with `data(spirals)`.
+>
+> Run the k-means algorithm (# clusters = 2) on the spiral data. Plot data with clusters annotated. What do you observe?
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
+```{r, eval=TRUE}
+km <- kmeans(spirals, centers = 2)
+
+plot(spirals, col=km$cluster, pch=19)
+```
+</div>
+
+> Run spectral clustering (# clusters = 2) on the spiral data. The spectral clustering algorithm is called with the function `specc`. Once again, plot the data with clusters annotated. 
+>
+> What do you observe now?
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
+```{r, eval=TRUE}
+sc <- specc(spirals, centers=2)
+
+plot(spirals, col=sc, pch=19)
+```
+</div>
+
 
 # Kernel data set
 
 As a final step, let's process Jean-Karim's similarity kernels. 
 
-To remind you, Jean-Karim has provided us with kernels for `r length(unique(c(data$gene1,data$gene2)))`.
+To remind you, Jean-Karim has provided us with several graph kernels that measure the similarity between human genes according to information derived from 5 sources. These sources include:
 
 Type   | Description
 -------|------------------------------------------------------------------------------------
@@ -94,6 +132,16 @@ HIPPO  | Protein interactions transferred from model organisms to human by ortho
 PI     | Protein interactions in human (from multiple databases)
 TM     | Protein interactions derived from the iHOP text mining method
 
+The genes in the similarity matrices (rows and columns) are derived from similarities between 120 genes that were selected 
+
+- chromosome condensation
+- DNA mismatch repair (KEGG:hsa03430)
+- mitotic spindle checkpoint
+- endocytosis (GO:0006897)
+- signalling by BMP
+
+`r length(unique(c(data$gene1,data$gene2)))`
+
 We will combine each of these kernels into a single matrix (graph). It is on this combined graph that we will perform clustering. 
 
 ## Get data
@@ -102,7 +150,7 @@ We will combine each of these kernels into a single matrix (graph). It is on thi
 
 ## Make a graph
 
-```{r}
+```{r, message=FALSE}
 library(igraph)
 ```
 
