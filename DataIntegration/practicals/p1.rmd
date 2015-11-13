@@ -15,6 +15,7 @@ output:
 ```{r, echo = FALSE, message = FALSE}
 devtools::source_url("https://raw.githubusercontent.com/scalefreegan/Teaching/master/DataIntegration/scripts/readData.R")
 ```
+[Companion lecture](http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l1.html)
 
 # Introduction to Clustering
 
@@ -76,7 +77,7 @@ devtools::source_url("https://raw.githubusercontent.com/scalefreegan/Teaching/ma
 
 ## Why cluster?
 
-## Simple clustering
+## Clustering simple data
 
 At it simplest
 
@@ -87,9 +88,15 @@ library(kernlab)
 data(spirals)
 ```
 
-## More complicated clustering
+## More complicated data
 
-If 
+What if the pattern in the data is more complicated? 
+
+Consider the following data set. How many clusters do you see?
+
+```{r, eval=TRUE, echo=FALSE}
+plot(spirals, pch=19, xlab="", ylab="")
+```
 
 > Plot the data `spirals`. You can load this data set with `data(spirals)`.
 >
@@ -120,9 +127,9 @@ plot(spirals, col=sc, pch=19)
 
 # Kernel data set
 
-As a final step, let's process Jean-Karim's similarity kernels. 
+Finally, let's process Jean-Karim's similarity kernels so that they are ready for subsequent lectures. 
 
-To remind you, Jean-Karim has provided us with several graph kernels that measure the similarity between human genes according to information derived from 5 sources. These sources include:
+To remind you, Jean-Karim has provided us with several graph kernels that measure similarities between 120 human genes according to information derived from 5 sources. These sources include:
 
 Type   | Description
 -------|------------------------------------------------------------------------------------
@@ -132,17 +139,17 @@ HIPPO  | Protein interactions transferred from model organisms to human by ortho
 PI     | Protein interactions in human (from multiple databases)
 TM     | Protein interactions derived from the iHOP text mining method
 
-The genes in the similarity matrices (rows and columns) are derived from similarities between 120 genes that were selected 
+The 120 genes in our data set were chosen for their role in the following biological processes:
 
 - chromosome condensation
-- DNA mismatch repair (KEGG:hsa03430)
+- DNA mismatch repair ([KEGG:hsa03430](http://www.genome.jp/dbget-bin/www_bget?pathway+hsa03430))
 - mitotic spindle checkpoint
-- endocytosis (GO:0006897)
+- endocytosis ([GO:0006897](https://www.ebi.ac.uk/QuickGO/GTerm?id=GO:0006897))
 - signalling by BMP
 
-`r length(unique(c(data$gene1,data$gene2)))`
+The remaining `r length(unique(c(data$gene1,data$gene2)))-120` genes have a predicted interaction with one of the 120 genes according to one of the 5 measures described above.
 
-We will combine each of these kernels into a single matrix (graph). It is on this combined graph that we will perform clustering. 
+The first thing we need to do is combine each of these kernels into a single matrix (graph). It is on this combined graph that we will perform clustering. 
 
 ## Get data
 
