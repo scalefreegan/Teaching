@@ -1,5 +1,5 @@
 ---
-title: "Practical 3: Cluster Analysis"
+title: "Practical 3: Cluster Interpretation and Visualization"
 subtitle: "EMBL Course: Data mining and integration with networks"
 author: "Aaron Brooks"
 date: "This should take about 20 minutes"
@@ -12,10 +12,17 @@ output:
     toc_depth: 2
 ---
 
-[Companion lecture](http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l3.html)
+[Companion lecture](http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l4.html)
 
-# Cluster Analysis
+# Cluster Visualization
 
+
+# Cluster Interpretation
+
+
+> This is a task.
+>
+> You should do 'X'.
 
 <div id='hint'>
 <h5 class="ui-closed" style="color:blue">Hint</h5>
