@@ -1,0 +1,206 @@
+---
+title: "Practical 2: Cluster Detection"
+subtitle: "EMBL Course: Data mining and integration with networks"
+author: "Aaron Brooks"
+date: "This should take about 45 minutes"
+output:
+  html_document:
+    css: include/hint.css
+    includes:
+      in_header: include/hint.html
+    toc: true
+    toc_depth: 2
+---
+
+[Companion lecture](http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l2.html)
+
+At the end of the previous session, we processed Jean-Karim's graph kernels, combining them into a single graph. In this session, we will apply two clustering techniques to the integrated data: spectral clustering and link-community clustering.
+
+# Spirals: Spectral Clustering
+
+As you will recall from the lecture, spectral clustering is a technique for clustering based on transformation by dimensionality reduction.
+
+Before applying spectral clustering to our data, we will derive a simple algorithm for spectral clustering. This will allow us to see more clearly how spectral clustering relates to k-means. We will once again explore the `spirals` data used during the first tutorial.
+
+The algorithm we will generate is similar to that described by Ng et al. [On Spectral Clustering: Analysis and an algorithm](http://ai.stanford.edu/~ang/papers/nips01-spectral.pdf). The `R` code was obtained and adapted from [João Neto](http://www.di.fc.ul.pt/~jpn/r/spectralclustering/spectralclustering.html)
+
+If it is not already loaded, please load the spirals dataset, which is included in the `kernlab` package.
+
+```{r}
+library(kernlab)
+data(spirals)
+```
+
+To remind you, spectral clustering appeared to provide a more desired result when clustering data sets that are separated poorly by standard k-means. Below I plot the data and the clustering result for both algorithms.
+
+```{r fig.align="center", echo=FALSE, fig.height=2.5}
+  par(mfrow = c(1,3))
+    km <- kmeans(spirals, centers = 2)
+    sc <- specc(spirals, centers = 2)
+    plot(spirals, pch = 19, xlab = "", ylab = "")
+    plot(spirals, col = km$cluster, pch = 19, xlab = "", ylab = "", main="K-means")
+    points(km$centers, col=1:2, pch=8, cex=2)
+    plot(spirals, col = sc, pch = 19, xlab = "", ylab = "", main="Spectral clustering")
+```
+
+In what follows, we will write an algorithm to perform spectral clustering. We will see - perhaps surprisingly - that spectral clustering boils down to performing k-means on eigenvectors of a similarity kernel applied to the original data.
+
+To help you write your code, [João Neto](http://www.di.fc.ul.pt/~jpn/r/spectralclustering/spectralclustering.html) has provided several pre-rolled functions, including:
+
+- A Gaussian kernel, **s**, to **calculate the similarity** between two points.
+
+```{r }
+s <- function(x1, x2, alpha=1) {
+  exp(- alpha * norm(as.matrix(x1-x2), type="F"))
+}
+```
+
+- A function, **make.affinity** to compute a restricted (or filtered) "affinity" between vertices using k-nearest neighbors.
+
+```{r }
+make.affinity <- function(S, n.neighboors=2) {
+  N <- length(S[,1])
+
+  if (n.neighboors >= N) {  # fully connected
+    A <- S
+  } else {
+    A <- matrix(rep(0,N^2), ncol=N)
+    for(i in 1:N) { # for each line
+      # only connect to those points with larger similarity
+      best.similarities <- sort(S[i,], decreasing=TRUE)[1:n.neighboors]
+      for (s in best.similarities) {
+        j <- which(S[i,] == s)
+        A[i,j] <- S[i,j]
+        A[j,i] <- S[i,j] # to make an undirected graph, ie, the matrix becomes symmetric
+      }
+    }
+  }
+  A
+}
+```
+
+Your algorithm should include the following steps:
+
+1. Compute the similarity matrix, **S**, between all points in the `spiral` dataset
+2. Calculate the affinity matrix, **A**, from **S** by applying k-nearest neighbors algorithm
+3. Compute the weighted degree diagonal matrix, **D**, from **A** by summing across each row
+4. Calculate the unnormalized Laplacian, **U**, by subtracting **A** from **D**
+5. Compute eigenvectors and eigenvalues of **U**.
+6. Perform k-means clustering on k smallest eigenvalues, ignoring the smallest (constant) eigenvector
+
+We will perform these steps one at a time. *If you find yourself spending more than 10-15 minutes on this section, please read the solution and move on to the following activities.*
+
+>
+> 1. Compute the similarity matrix, **S**, between all points in the `spiral` dataset
+>
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
+```{r }
+  make.similarity <- function(my.data, similarity) {
+    N <- nrow(my.data)
+    S <- matrix(rep(NA,N^2), ncol=N)
+    for(i in 1:N) {
+      for(j in 1:N) {
+        if (i!=j) {
+          S[i,j] <- similarity(my.data[i,], my.data[j,])
+        } else {
+          S[i,j] <- 0
+        }
+      }
+    }
+    S
+  }
+
+  S <- make.similarity(spirals, s)
+```
+</div>
+
+>
+> 2. Calculate the affinity matrix, **A**, from **S** by applying k-nearest neighbors algorithm
+>
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
+```{r }
+A <- make.affinity(S, 3)  # use 3 neighbors (includes self)
+```
+</div>
+
+>
+> 3. Compute the weighted degree diagonal matrix, **D**, from **A** by summing across each row
+>
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
+```{r }
+D <- diag(apply(A, 1, sum))
+```
+</div>
+
+>
+> 4. Calculate the unnormalized Laplacian, **U**, by subtracting **A** from **D**
+>
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
+```{r }
+U <- D - A
+```
+</div>
+
+>
+> 5. Compute eigenvectors and eigenvalues of **U**.
+>
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
+```{r }
+evL <- eigen(U, symmetric=TRUE)
+```
+</div>
+
+>
+> 6. Perform k-means clustering on k smallest eigenvalues, ignoring the smallest (constant) eigenvector
+>
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
+```{r }
+k   <- 2
+Z   <- evL$vectors[,(ncol(evL$vectors)-k+1):ncol(evL$vectors)]
+km <- kmeans(Z, centers=k, nstart=5)
+```
+</div>
+
+>
+> Plot the eigen as well as the original data
+> Are the two spiral clusters correctly identified? What does the data look like in the transformed space?
+>
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
+```{r fig.align = "center", echo = FALSE, fig.height = 3.5, fig.width = 6}
+par(mfrow=c(1,2))
+plot(Z, col=km$cluster, pch = 19, xlab = "Eigenvector 1", ylab = "Eigenvector 2")
+plot(spirals, col=km$cluster, pch = 19, xlab = "", ylab = "")
+```
+</div>
+
+# Load Graph Kernel Data
+
+>
+> Load the combined graph kernel data produced in the preceeding lecture
+>
+
+# Spectral Clustering: subset
+
+# Spectral Clustering: full
+
+# Link-community detection
+
+Link-community detection inverts the clustering problem. Rather than cluster similar nodes, it instead clusters similar edges.
+
+In link-community detection, nodes can now belong to several clusters. This is particularly useful in biological contexts, where one might like to express, for example, the different role a particular gene has in different contexts.
+
+You can learn more about link-community detection in the [original paper](http://www.nature.com/nature/journal/v466/n7307/full/nature09182.html)

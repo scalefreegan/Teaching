@@ -3,7 +3,7 @@ title: "Practical 1: Introduction"
 subtitle: "EMBL Course: Data mining and integration with networks"
 author: "Aaron Brooks"
 date: "This should take about 25 minutes"
-output: 
+output:
   html_document:
     css: include/hint.css
     includes:
@@ -19,21 +19,21 @@ devtools::source_url("https://raw.githubusercontent.com/scalefreegan/Teaching/ma
 
 # Introduction
 
-Welcome to the first practical lesson for the **clustering** section of the EMBL course: *Data mining and integration with networks*. 
+Welcome to the first practical lesson for the **clustering** section of the EMBL course: *Data mining and integration with networks*.
 
 This document will introduce basic concepts related to clustering and provide a gentle introduction to clustering with a simple example. At the end of the practical we will read and process Jean-Karim's kernels so that they are ready to analyze in the subsequent tutorials.
 
 # Format of the practicals
 
-First, a word about the format of these practicals. 
+First, a word about the format of these practicals.
 
-The practicals are designed to allow self-guided exploration of the course materials. Each practical is paired with information from the preceeding lecture. You should be able to explore this document at your own pace and even refer to it again in the future. 
+The practicals are designed to allow self-guided exploration of the course materials. Each practical is paired with information from the preceding lecture. You should be able to explore this document at your own pace and even refer to it again in the future.
 
-In addition to the text, be on the lookout for three special formats in these documents. These sections include scripts, excercises and solutions, respectively.   
+In addition to the text, be on the lookout for three special formats in these documents. These sections include scripts, exercises and solutions, respectively.   
 
 **Scripts**
 
-Scripts are denoted by blocked text. You can copy and paste these commands into the R terminal. Give the command below a try. 
+Scripts are denoted by blocked text. You can copy and paste these commands into the R terminal. Give the command below a try.
 
 ```{r, eval=FALSE}
 cat("Welcome to the first practical on clustering\n")
@@ -41,9 +41,9 @@ cat("Welcome to the first practical on clustering\n")
 
 **Excercises**
 
-Throughout the practical you will be asked to evaluate your understanding by writing code. You should solve these excercise by writing your own script to perform the requested operations or answer the question. Excercises are denoted by blocked quotation, as below.
+Throughout the practical you will be asked to evaluate your understanding by writing code. You should solve these exercise by writing your own script to perform the requested operations or answer the question. Exercises are denoted by blocked quotation, as below.
 
-> This is an excercise.
+> This is an exercise.
 >
 > You should write your own code to solve it.
 
@@ -60,7 +60,7 @@ The solution pulldowns look like this. Give the one below a try:
 ![](http://a.dilcdn.com/bl/wp-content/uploads/sites/6/2013/11/01-400x225.jpg)
 </div>
 
-*Don't cheat (too much). These excercises are designed to make sure that you're keeping up. Give it a solid effort before revealing the answer. Yoda remembers...*
+*Don't cheat (too much). These exercises are designed to make sure that you're keeping up. Give it a solid effort before revealing the answer. Yoda remembers...*
 
 # Requirements
 
@@ -72,33 +72,33 @@ This tutorial requires a number of R packages. To install theses packages you ca
 install.packages("devtools")
 devtools::source_url("https://raw.githubusercontent.com/scalefreegan/Teaching/master/DataIntegration/scripts/installPackages.R")
 ```
-    
+
 # Clustering
 
-Clustering is an approach to group similar elements of a matrix or graph. The objective is to group  the elements such that the those within a cluster are more similar to one another than they are to everything else. Finding the optimal partitioning of data into **k** clusters is the objective of most clustering algorithms. 
+Clustering is an approach to group similar elements of a matrix or graph. The objective is to group  the elements such that the those within a cluster are more similar to one another than they are to everything else. Finding the optimal partitioning of data into **k** clusters is the objective of most clustering algorithms.
 
-There are many different approaches to clustering. Here we will introduce clustering results for data with simple and more complex structure. In the subsequent lectures and tutorials we will return these examples to understand how the algorithms work and how to assess clustering results. 
+There are many different approaches to clustering. Here we will introduce clustering results for data with simple and more complex structure. In the subsequent lectures and tutorials we will return these examples to understand how the algorithms work and how to assess clustering results.
 
 ## Clustering simple data
 
-We will focus on the `iris` flower data set first introduced by Ronald Fisher in 1936. The `iris` data set contains 50 samples from each of three species of Iris (Iris setosa, Iris virginica and Iris versicolor). 
+We will focus on the `iris` flower data set first introduced by Ronald Fisher in 1936. The `iris` data set contains 50 samples from each of three species of Iris (Iris setosa, Iris virginica and Iris versicolor).
 
-Since there are 3 species in the data set, we will see how well three clusters (one for each species) can describe differences between the length and width of the sepals. As we will see later, choosing the correct number of clusters **k** isn't usually so trivial. 
+Since there are 3 species in the data set, we will see how well three clusters (one for each species) can describe differences between the length and width of the sepals. As we will see later, choosing the correct number of clusters **k** isn't usually so trivial.
 
-> Plot `Sepal.Length` versus `Sepal.Width` for the internal R data set `iris`. 
+> Plot `Sepal.Length` versus `Sepal.Width` for the internal R data set `iris`.
 >
 > Estimate the number of clusters required to describe this data by visual inspection.
 
 <div id='hint'>
 <h5 class="ui-closed" style="color:blue">Solution</h5>
-```{r, eval=TRUE}
+```{r, eval=TRUE, fig.align="center", fig.height=4, fig.width=5}
 plot(iris$Sepal.Length, iris$Sepal.Width, pch = 19)
 ```
 </div>
 
 The data plotted with the clusters (color) and their centers (star) is included below:
 
-```{r, eval=TRUE}
+```{r, eval=TRUE, fig.align="center", fig.height=4, fig.width=5}
 ikm <- kmeans(cbind(iris$Sepal.Length, iris$Sepal.Width), centers = 3)
 plot(iris$Sepal.Length, iris$Sepal.Width, col=ikm$cluster, pch = 19)
 points(ikm$centers, col=1:3, pch=8, cex=2)
@@ -110,52 +110,52 @@ We can see how well these clusters correspond to the species labels.
 table(iris$Species, ikm$cluster)
 ```
 
-We will return to the details of the k-means clustering algorithm in the [next lecture](http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l2.html). 
+We will return to the details of the k-means clustering algorithm in the [next lecture](http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l2.html).
 
 ## More complicated data
 
-But what happens if the patterns in your data are more complicated? 
+But what happens if the patterns in your data are more complicated?
 
 Consider the following data set. How many clusters do you see?
 
-```{r, eval=TRUE, echo=FALSE}
+```{r, eval=TRUE, echo=FALSE, fig.align="center", fig.height=4, fig.width=4}
 library(kernlab)
 data(spirals)
 plot(spirals, pch = 19, xlab = "", ylab = "")
 ```
 
-> Run  k-means  (# clusters = 2) on the spiral data. You can load this data set with `data(spirals)`. K-means can be run with the commmand `kmeans`. Specify the number of clusters with `centers = 2`.
-> 
+> Run  k-means  (# clusters = 2) on the spiral data. You can load this data set with `data(spirals)`. K-means can be run with the command `kmeans`. Specify the number of clusters with `centers = 2`.
+>
 > Plot the `spirals` data with clusters annotated. What do you observe? Are these the clusters what you would expect?
 
 <div id='hint'>
 <h5 class="ui-closed" style="color:blue">Solution</h5>
-```{r, eval=TRUE}
+```{r, eval=TRUE, fig.align="center", fig.height=4, fig.width=4}
 km <- kmeans(spirals, centers = 2)
-plot(spirals, col = km$cluster, pch = 19)
+plot(spirals, col = km$cluster, pch = 19, xlab = "", ylab = "")
 points(km$centers, col=1:2, pch=8, cex=2)
 ```
 </div>
 
 For some data with more complicated (e.g., non-linear) relationships between similar points, alternative approaches like spectral clustering may be more appropriate.
 
-> Run spectral clustering (# clusters = 2) on the `spirals` data. Spectral clustering is called with the function `specc`. Like k-means, specifiy the number of clusters with `centers = 2`. Once again, plot the data with clusters annotated. 
+> Run spectral clustering (# clusters = 2) on the `spirals` data. Spectral clustering is called with the function `specc`. Like k-means, specify the number of clusters with `centers = 2`. Once again, plot the data with clusters annotated.
 >
 > What do you observe now?
 
 <div id='hint'>
 <h5 class="ui-closed" style="color:blue">Solution</h5>
-```{r, eval=TRUE}
+```{r, eval=TRUE, fig.align="center", fig.height=4, fig.width=4}
 sc <- specc(spirals, centers = 2)
-plot(spirals, col = sc, pch = 19)
+plot(spirals, col = sc, pch = 19, xlab = "", ylab = "")
 ```
 </div>
 
-We will return again to spectral clustering with more theoretical and practical informaiton in the subsequent [lecture](http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l2.html) and [tutorial](http://scalefreegan.github.io/Teaching/DataIntegration/practicals/p2.html)
+We will return again to spectral clustering with more theoretical and practical information in the subsequent [lecture](http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l2.html) and [tutorial](http://scalefreegan.github.io/Teaching/DataIntegration/practicals/p2.html)
 
 # Kernel data set
 
-Before moving on to the next lecture, we will process Jean-Karim's similarity kernels so that they are ready for subsequent lectures. 
+Before moving on to the next lecture, we will process Jean-Karim's similarity kernels so that they are ready for subsequent lectures.
 
 To remind you, Jean-Karim has provided us with several graph kernels that measure similarities between 120 human genes according to information derived from 5 sources. These sources include:
 
@@ -173,11 +173,11 @@ The 120 genes in our data set were chosen for their role in the following biolog
 - DNA mismatch repair ([KEGG:hsa03430](http://www.genome.jp/dbget-bin/www_bget?pathway+hsa03430))
 - mitotic spindle checkpoint
 - endocytosis ([GO:0006897](https://www.ebi.ac.uk/QuickGO/GTerm?id=GO:0006897))
-- signalling by BMP
+- signaling by BMP
 
 The remaining `r length(unique(c(data$gene1,data$gene2)))-120` genes have a predicted interaction with one of the 120 genes according to one of the 5 measures described above.
 
-The first thing we need to do is combine each of these kernels into a single matrix (graph). It is on this combined graph that we will perform clustering in the following tutorials. 
+The first thing we need to do is combine each of these kernels into a single matrix (graph). It is on this combined graph that we will perform clustering in the following tutorials.
 
 ## Get data
 
@@ -195,13 +195,13 @@ head(data)
 
 ## Combine and normalize kernels
 
-As you will recall from Jean-Karim's lecture, a valid kernel should be positive semidefinite (i.e., a Hermitian matrix whose eigenvalues are nonnegative). One way to make sure that our kernels are positive semidefinite is to add a sufficiently large value to the diagonal. For example, you can add the absolute value of the smallest eigenvalue to the diagonal. Once the validitiy of the kernels is established, each of them can simply be added together to produce a combined kernel. 
+As you will recall from Jean-Karim's lecture, a valid kernel should be positive semidefinite (i.e., a Hermitian matrix whose eigenvalues are nonnegative). One way to make sure that our kernels are positive semidefinite is to add a sufficiently large value to the diagonal. For example, you can add the absolute value of the smallest eigenvalue to the diagonal. Once the validity of the kernels is established, each of them can simply be added together to produce a combined kernel.
 
-> Combine and normalize the kernels into a single matrix with values on the interval $[0,1]$
+> Combine and normalize the kernels into a single matrix with values on the interval $[0,1]$, verifying that each is a valid kernel.
 >
-> Return a composite matrix that has dimensions `r dim(data)[1]` by `r dim(data)[1]`
+> Return a composite matrix that has dimensions `r length(unique(c(data[,1], data[,2])))` by `r length(unique(c(data[,1], data[,2])))`
 
-To save some effort, I've included a function to normalize a matrix, $K$, on the interval $[0,1]$. 
+To save some effort, I've included a function to normalize a matrix, $K$, on the interval $[0,1]$.
 
 ```{r eval=TRUE}
 normalizeKernel = function(K) {
@@ -235,7 +235,7 @@ ms = lapply(colnames(data)[3:7], function(d){
   eigen_m = eigen(m)
 
   # make sure m is a valid kernel by adding
-  # make matrix postitive semi-definite
+  # make matrix positive semi-definite
   toadd = ceiling(abs(min(eigen_m$values)))
   diag(m) = diag(m) + toadd
   # you don't have to normalize every kernel individually
@@ -258,18 +258,17 @@ mc = normalizeKernel(mc)
 
 Now that we have transformed the similarity kernels into a single combined matrix, we can visualize it as a graph using the R-package `igraph`.
 
-Plotting the graph can take some time, so I've simply included an image of it below. 
+Plotting the graph can take some time, so I've simply included an image of it below. The default igraph layout for a graph of this size is the [DrL](http://igraph.org/r/doc/layout_with_drl.html) layout, which is a force-directed layout suitable for larger graphs (# vertices > 1000). The resulting image gives us a first clue about how we might cluster the network.  
 
 ```{r, eval=FALSE}
 library(igraph)
 g = graph_from_adjacency_matrix(mc, mode = "undirected", weighted = TRUE, diag = FALSE)
 
-plot.igraph(g, vertex.size = 5, vertex.label = NA)
+plot.igraph(g, vertex.size = 5, vertex.label = NA, curved = T)
 ```
 
-<img src="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/resources/labgraph.png" width="500px" />
+<p style="text-align:center;"><img src="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/resources/labgraph.png" width="500px" /></p>
 
 > Do you see any structure in this network?
 >
 > How would described that structure with an algorithm?
-
