@@ -190,7 +190,7 @@ plot(spirals, col=km$cluster, pch = 19, xlab = "", ylab = "")
 # Load Graph Kernel Data
 
 >
-> Load the combined graph kernel data produced in the preceeding lecture
+> Load the combined graph kernel data produced in the preceding lecture
 >
 
 # Spectral Clustering: subset
