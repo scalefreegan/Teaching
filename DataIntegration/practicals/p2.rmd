@@ -12,6 +12,15 @@ output:
     toc_depth: 2
 ---
 
+```{r, echo = FALSE, message = FALSE}
+library(pheatmap)
+library(dplyr)
+library(reshape2)
+library(igraph)
+library(linkcomm)
+library(kernlab)
+```
+
 [Companion lecture](http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l2.html)
 
 At the end of the previous session, we processed Jean-Karim's graph kernels, combining them into a single graph. In this session, we will apply two clustering techniques to the integrated data: spectral clustering and link-community clustering.
@@ -161,7 +170,7 @@ evL <- eigen(U, symmetric=TRUE)
 </div>
 
 >
-> 6. Perform k-means clustering on k smallest eigenvalues, ignoring the smallest (constant) eigenvector
+> 6. Perform k-means clustering on matrix, **Z**, consisting of eigenvectors for k smallest eigenvalues, ignoring the smallest (constant) eigenvector
 >
 
 <div id='hint'>
@@ -174,7 +183,7 @@ km <- kmeans(Z, centers=k, nstart=5)
 </div>
 
 >
-> Plot the eigen as well as the original data
+> Plot the eigenvector matrix (**Z**) as well as the original data
 > Are the two spiral clusters correctly identified? What does the data look like in the transformed space?
 >
 
@@ -190,10 +199,60 @@ plot(spirals, col=km$cluster, pch = 19, xlab = "", ylab = "")
 # Load Graph Kernel Data
 
 >
-> Load the combined graph kernel data produced in the preceding lecture
+> Load the combined kernel and graph produced in the preceding practical
 >
 
+```{r }
+GITHUBDIR = "https://github.com/scalefreegan/Teaching/raw/master/DataIntegration/data/"
+load(url(paste(GITHUBDIR, "kernel.rda", sep=""), method = "libcurl"))
+```
+
 # Spectral Clustering: subset
+
+Before clustering the full dataset - which can be hard to visualize and evaluate - we will apply spectral clustering on a representative subset of the graph so that we can visualize its behavior.
+
+I have selected 4 vertices with fairly high degree (degree = 20) from the matrix, **mc**, and selected all of their first neighbors. The sub-matrix is called, **mc2**.
+
+```{r }
+degree = apply(mc, 1, function(i)sum(i > 0))
+n_i = which(degree == 20)[1:4]
+n = unique(c(n_i, which(mc[n_i, ]>0, arr.ind = T)[,2]))
+mc2 = mc[n, n]
+```
+
+>
+> Make an igraph network from the sub-matrix **mc2**.
+>
+> Plot the graph. How many clusters do you expect based on this visualization?
+>
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
+```{r fig.align = "center", echo = FALSE, fig.height = 3.5, fig.width = 6}
+g_small = graph_from_adjacency_matrix(mc2, mode = "undirected", weighted = TRUE, diag = FALSE)
+plot.igraph(g_small, vertex.label=NA)
+```
+</div>
+
+
+> Perform spectral clustering on the sub-matrix **mc2**. Remember that the matrix is a kernel. Therefore, you should pass it to corresponding functions using the function `as.kernelMatrix()`
+>
+> Spectral clustering can be performed with the function `specc` from the `kernlab` package. Choose the number of clusters (centers) to be equal to the number you estimated above.
+>
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
+```{r fig.align = "center", echo = FALSE, fig.height = 3.5, fig.width = 6}
+mc2_specc = specc(as.kernelMatrix(mc2), centers = 3)
+v = as.data.frame(factor(mc_spcc2))
+rownames(v) = rownames(mc2)
+pheatmap(mc2, annotation = v)
+g_small = graph_from_adjacency_matrix(mc2, mode = "undirected", weighted = TRUE, diag = FALSE)
+plot.igraph(g_small,vertex.label=NA,vertex.color=v[names(V(g_small)),])
+pheatmap(mc2)
+
+```
+</div>
 
 # Spectral Clustering: full
 
