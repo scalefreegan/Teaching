@@ -92,6 +92,8 @@ mc_spcc2 = specc(as.kernelMatrix(mc2), centers=5)
 v = as.data.frame(factor(mc_spcc2))
 rownames(v) = rownames(mc2)
 pheatmap(mc2,annotation=v)
+g_small = graph_from_adjacency_matrix(mc2, mode = "undirected", weighted = TRUE, diag = FALSE)
+plot.igraph(g_small,vertex.label=NA)
 plot.igraph(g_small,vertex.label=NA,vertex.color=v[names(V(g_small)),])
 
 g_lpc_eigen = eigen(g_lpc)

@@ -1,5 +1,5 @@
 ---
-title: "Practical 3: Cluster Analysis"
+title: "Practical 3: Cluster Evaluation and Visualization"
 subtitle: "EMBL Course: Data mining and integration with networks"
 author: "Aaron Brooks"
 date: "This should take about 20 minutes"
@@ -14,7 +14,19 @@ output:
 
 [Companion lecture](http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l3.html)
 
-# Cluster Analysis
+# Choosing **k**
+
+One of the most difficult aspects of clustering is choosing the "correct" number of clusters.
+
+We have seen in the previous practicals how this can be accomplished informally by simple visual inspection of the data, for example. In other cases, the number of clusters may be motivated by the problem itself, i.e. some kind of prior expectation on the number of clusters. In most cases, however, you will want to have a more formal criteria with which to evaluate the *goodness* of clustering at a given **k**. Many methods and metrics have been proposed to accomplish this task. Here we will focus on two methods: the elbow method and modularity
+
+# Elbow method:
+
+# Modularity maximization 
+
+Because it would take too long to compute,
+
+# Visualizing link-community clusters
 
 
 <div id='hint'>
