@@ -1,5 +1,5 @@
 ---
-title: "Practical 3: Cluster Interpretation and Visualization"
+title: "Practical 4: Cluster Interpretation       "
 subtitle: "EMBL Course: Data mining and integration with networks"
 author: "Aaron Brooks"
 date: "This should take about 20 minutes"
@@ -14,11 +14,9 @@ output:
 
 [Companion lecture](http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l4.html)
 
-# Cluster Visualization
-
-
 # Cluster Interpretation
 
+In this final lesson, we
 
 > This is a task.
 >

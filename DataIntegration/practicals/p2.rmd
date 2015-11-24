@@ -13,12 +13,7 @@ output:
 ---
 
 ```{r, echo = FALSE, message = FALSE}
-library(pheatmap)
-library(dplyr)
-library(reshape2)
-library(igraph)
-library(linkcomm)
-library(kernlab)
+
 ```
 
 [Companion lecture](http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l2.html)
@@ -35,8 +30,15 @@ The algorithm we will generate is similar to that described by Ng et al. [On Spe
 
 If it is not already loaded, please load the spirals dataset, which is included in the `kernlab` package.
 
-```{r}
+```{r message = FALSE}
+# libraries
+library(pheatmap)
+library(dplyr)
+library(reshape2)
+library(igraph)
+library(linkcomm)
 library(kernlab)
+# data
 data(spirals)
 ```
 
@@ -189,12 +191,14 @@ km <- kmeans(Z, centers=k, nstart=5)
 
 <div id='hint'>
 <h5 class="ui-closed" style="color:blue">Solution</h5>
-```{r fig.align = "center", echo = FALSE, fig.height = 3.5, fig.width = 6}
+```{r fig.align = "center", fig.height = 3.5, fig.width = 6}
 par(mfrow=c(1,2))
 plot(Z, col=km$cluster, pch = 19, xlab = "Eigenvector 1", ylab = "Eigenvector 2")
 plot(spirals, col=km$cluster, pch = 19, xlab = "", ylab = "")
 ```
 </div>
+
+You may have noticed a parameter or two lurking around, for example the `n.neighboors` parameter in the k-nearest neighbors function. These parameters would need to be adjusted depending on the data or estimated automatically. In addition, it should be noted that there are several implementations of spectral clustering, using any of a number of different laplacians - you have just implemented a relatively simple version for the sake of clarity. For more detailed information, please refer to Ng et al. [On Spectral Clustering: Analysis and an algorithm](http://ai.stanford.edu/~ang/papers/nips01-spectral.pdf)
 
 # Load Graph Kernel Data
 
@@ -204,7 +208,7 @@ plot(spirals, col=km$cluster, pch = 19, xlab = "", ylab = "")
 
 ```{r }
 GITHUBDIR = "https://github.com/scalefreegan/Teaching/raw/master/DataIntegration/data/"
-load(url(paste(GITHUBDIR, "kernel.rda", sep=""), method = "libcurl"))
+load(url(paste(GITHUBDIR, "kernel.rda", sep = ""), method = "libcurl"))
 ```
 
 # Spectral Clustering: subset
@@ -216,7 +220,7 @@ I have selected 4 vertices with fairly high degree (degree = 20) from the matrix
 ```{r }
 degree = apply(mc, 1, function(i)sum(i > 0))
 n_i = which(degree == 20)[1:4]
-n = unique(c(n_i, which(mc[n_i, ]>0, arr.ind = T)[,2]))
+n = unique(c(n_i, which(mc[n_i, ] > 0, arr.ind = T)[, 2]))
 mc2 = mc[n, n]
 ```
 
@@ -228,9 +232,10 @@ mc2 = mc[n, n]
 
 <div id='hint'>
 <h5 class="ui-closed" style="color:blue">Solution</h5>
-```{r fig.align = "center", echo = FALSE, fig.height = 3.5, fig.width = 6}
+```{r fig.align = "center", fig.height = 4, fig.width = 6.5}
 g_small = graph_from_adjacency_matrix(mc2, mode = "undirected", weighted = TRUE, diag = FALSE)
-plot.igraph(g_small, vertex.label=NA)
+g_layout = layout.fruchterman.reingold(g_small)
+plot.igraph(g_small, vertex.label = NA, layout = g_layout)
 ```
 </div>
 
@@ -239,27 +244,102 @@ plot.igraph(g_small, vertex.label=NA)
 >
 > Spectral clustering can be performed with the function `specc` from the `kernlab` package. Choose the number of clusters (centers) to be equal to the number you estimated above.
 >
+> Make an annotation data.frame, **v_small**, that contains a single column denoting the cluster membership of each gene. The values should be encoded as `factors`. The rownames of this matrix should correspond to the rownames of **mc2**.
+>
 
 <div id='hint'>
 <h5 class="ui-closed" style="color:blue">Solution</h5>
-```{r fig.align = "center", echo = FALSE, fig.height = 3.5, fig.width = 6}
+```{r fig.align = "center", fig.height = 5}
 mc2_specc = specc(as.kernelMatrix(mc2), centers = 3)
-v = as.data.frame(factor(mc_spcc2))
-rownames(v) = rownames(mc2)
-pheatmap(mc2, annotation = v)
-g_small = graph_from_adjacency_matrix(mc2, mode = "undirected", weighted = TRUE, diag = FALSE)
-plot.igraph(g_small,vertex.label=NA,vertex.color=v[names(V(g_small)),])
-pheatmap(mc2)
+v_small = as.data.frame(factor(mc2_specc))
+rownames(v_small) = rownames(mc2)
+```
+</div>
 
+>
+> Make an `igraph` network from the kernel matrix, **mc2**.
+>
+> Plot the network, coloring each node by cluster membership as contained in the data.frame, **v**.
+>
+> How do the clusters correspond to those you predicted before clustering?
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
+```{r fig.align = "center", fig.height = 5}
+g_small = graph_from_adjacency_matrix(mc2, mode = "undirected", weighted = TRUE, diag = FALSE)
+plot.igraph(g_small,vertex.label=NA,vertex.color=v_small[names(V(g_small)), ], layout = g_layout)
+```
+</div>
+
+>
+> Plot a heatmap representation of the kernel matrix, **mc2**. Annotate each column (gene) with its corresponding cluster membership. A nice package for plotting heatmaps is the `pheatmap` package, which allows you to annotate both the rows and the columns of a matrix.     
+>
+> Set the diagonal of **mc2** = 0, so that the low-weighted edges are better represented.
+>
+> Are there any differences you notice between this representation and the previous graph-based visualization?
+>
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
+```{r fig.align = "center", fig.height = 5}
+diag(mc2) = 0
+pheatmap(mc2, annotation = v_small, show_rownames = F, show_colnames = F)
 ```
 </div>
 
 # Spectral Clustering: full
 
+Having evaluated the behavior of spectral clustering on a small example, we will now apply it to the full data set.
+
+>
+> Perform spectral clustering on the full kernel matrix, **mc**. As before, remember to pass it `.asKernelMatrix()`.
+>
+> For this dataset, set parameter `centers = 17`.
+>
+> As before, make an annotation data.frame, **v**, to store each of the cluster assignments
+>
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
+```{r eval = FALSE}
+mc_specc = specc(as.kernelMatrix(mc), centers = 17)
+v = as.data.frame(factor(mc_specc))
+rownames(v) = rownames(mc)
+colors = c(RColorBrewer::brewer.pal(9,"Set1"),RColorBrewer::brewer.pal(9,"Set3"),RColorBrewer::brewer.pal(8,"Set2"))
+plot.igraph(g,vertex.label=NA,vertex.color=v[names(V(g)), ], edge.curved = T, vertex.size = 7, palette = colors)
+```
+</div>
+
+You will notice that I have provided you with the number of clusters (or centers) to detect in the dataset. In the following lecture and tutorial you will see how I selected this value.
+
 # Link-community detection
 
-Link-community detection inverts the clustering problem. Rather than cluster similar nodes, it instead clusters similar edges.
+As an alternative to node-based clustering, we will conclude by performing link-community detection on the gene-gene similarity kernel.
 
-In link-community detection, nodes can now belong to several clusters. This is particularly useful in biological contexts, where one might like to express, for example, the different role a particular gene has in different contexts.
+As you will recall from the lecture, link-community detection inverts the clustering problem. Rather than cluster similar nodes, it instead tries to clusters similar edges.
+
+Interestingly: Given this formulation, nodes can now belong to several clusters. This is particularly useful in biological contexts, where an investigator might like to express, for example, how the role or function of a particular gene may vary across different contexts.
 
 You can learn more about link-community detection in the [original paper](http://www.nature.com/nature/journal/v466/n7307/full/nature09182.html)
+
+>
+> Perform link-community clustering on the full kernel matrix, *mc*, using the function `getLinkCommunities()` from the `linkcomm` package.  
+>
+> To pass the the kernel matrix to link community algorithm, you will need to format it as an *n x 3* edge list matrix, i.e., `[node1, node2, weight]`, where *n* is the number of pairs of nodes in the network. An easy way to get this matrix is from the `igraph` graph object `g` that we created previously using the function `as_edgelist()`
+>
+> Be sure to set the `directed = FALSE` for link community clustering.
+>
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
+```{r eval = FALSE}
+# link communities
+mc_edge = as_edgelist(g)
+mc_edge = data.frame(node1 = mc_edge[,1], node2 = mc_edge[,2], weight = E(g)$weight)
+g_linkcomm = getLinkCommunities(mc_edge, directed = FALSE, plot = FALSE)
+```
+</div>
+
+Unlike spectral clustering, the link-community detection algorithm will automatically select the number of clusters. In the next lecture and practical session we will follow up on both networks, learn how the number of clusters was determined for both approaches.
+
+For now, you can rest easy.  
