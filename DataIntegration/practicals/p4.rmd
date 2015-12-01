@@ -14,13 +14,19 @@ output:
 
 [Companion lecture](http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l4.html)
 
-In this final lesson, we
+In this final lesson we will apply tools to visualize and interpret the community structure of our networks. Because the link communities produce structures that are more appealing for visual analysis (e.g., overlapping communities), we will focus on visualization and interpretation of these clusters, although in principle the same approaches could be applied to the spectral clusters as well.
 
 # Visualizing link-community clusters
 
 # Cluster Interpretation
 
 ## Export to Cytoscape
+
+>
+> Export the graph and link community annotations to Cytoscape. For the purpose of this exercise, only keep the edges that are assigned to a community by link community clustering.
+>
+> The community IDs can be accessing the `edge` attribute of the linkcomm object, e.g. `g_linkcomm$edges`
+>
 
 <div id='hint'>
 <h5 class="ui-closed" style="color:blue">Solution</h5>
@@ -29,16 +35,19 @@ In this final lesson, we
 mc_edge = as_edgelist(g)
 mc_edge = data.frame(node1 = mc_edge[,1], node2 = mc_edge[,2], weight = E(g)$weight)
 linkcomm_edgelist = g_linkcomm$edges
-write.table(merge(mc_edge,linkcomm_edgelist,by=c("node1","node2")), file="~/Documents/git/Teaching/DataIntegration/data/graph.txt", sep = "\t", quote = F, col.names=T, row.names = F)
+write.table(merge(mc_edge,linkcomm_edgelist,by=c("node1","node2")), file="graph.txt", sep = "\t", quote = F, col.names=T, row.names = F)
 ```
 </div>
 
-> This is a task.
 >
-> You should do 'X'.
+> Analyze the
+>
+> Some things to try:
+> - Layout the network with different algorithms
+> - Color each edge according to its
 
 <div id='hint'>
 <h5 class="ui-closed" style="color:blue">Hint</h5>
-<div id='hint'>
-
+<p>You're on your own for this one!</p>
+<iframe src="//giphy.com/embed/OOZLyBA9Euq2I?html5=true" width="480" height="345" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="http://giphy.com/gifs/power-rangers-morphin-OOZLyBA9Euq2I">via GIPHY</a></p>
 </div>
