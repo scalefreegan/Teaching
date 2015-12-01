@@ -1,5 +1,5 @@
 ---
-title: "Practical 4: Cluster Interpretation       "
+title: "Practical 4: Cluster Visualization and Interpretation       "
 subtitle: "EMBL Course: Data mining and integration with networks"
 author: "Aaron Brooks"
 date: "This should take about 20 minutes"
@@ -14,9 +14,24 @@ output:
 
 [Companion lecture](http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l4.html)
 
+In this final lesson, we
+
+# Visualizing link-community clusters
+
 # Cluster Interpretation
 
-In this final lesson, we
+## Export to Cytoscape
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
+```{r eval = FALSE}
+# link communities
+mc_edge = as_edgelist(g)
+mc_edge = data.frame(node1 = mc_edge[,1], node2 = mc_edge[,2], weight = E(g)$weight)
+linkcomm_edgelist = g_linkcomm$edges
+write.table(merge(mc_edge,linkcomm_edgelist,by=c("node1","node2")), file="~/Documents/git/Teaching/DataIntegration/data/graph.txt", sep = "\t", quote = F, col.names=T, row.names = F)
+```
+</div>
 
 > This is a task.
 >
