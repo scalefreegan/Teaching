@@ -60,7 +60,7 @@ The solution pulldowns look like this. Give the one below a try:
 ![](http://a.dilcdn.com/bl/wp-content/uploads/sites/6/2013/11/01-400x225.jpg)
 </div>
 
-*Don't cheat (too much). These exercises are designed to make sure that you're keeping up. Give it a solid effort before revealing the answer. Yoda remembers...*
+*Don't cheat (too much). These exercises are designed to make sure that you're keeping up. Give it a solid effort before revealing the answer.*
 
 # Requirements
 
@@ -96,6 +96,14 @@ plot(iris$Sepal.Length, iris$Sepal.Width, pch = 19)
 ```
 </div>
 
+>
+> Try to cluster these data using the function `kmeans`, with the parameter `centers` set to the number of clusters you estimated above.
+>
+> Plot the data with each of the data points colored by its cluster membership.  
+>
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
 The data plotted with the clusters (color) and their centers (star) is included below:
 
 ```{r, eval=TRUE, fig.align="center", fig.height=4, fig.width=5}
@@ -109,6 +117,9 @@ We can see how well these clusters correspond to the species labels.
 ```{r, eval=TRUE}
 table(iris$Species, ikm$cluster)
 ```
+As you can see the classification is pretty good, but not perfect - especially for the species that are more poorly resolved by these two measurements.
+
+</div>
 
 We will return to the details of the k-means clustering algorithm in the [next lecture](http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l2.html).
 
@@ -193,6 +204,12 @@ The data is returned as a `r dim(data)[1]` by `r dim(data)[2]` data.frame with t
 head(data)
 ```
 
+We can visualize each of the component networks to get a sense for their structure. Here I plot each data set as a network. To simply the graphs, I only include  genes with non-zero entries for each of the component networks (so each is a subset of the complete dataset we just retrieved).
+
+<p style="text-align:center;"><img src="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/resources/component_graphs.png" width="500px" /></p>
+
+Keep the topology of these individual networks in mind as we go forward combining them.
+
 ## Combine and normalize kernels
 
 As you will recall from Jean-Karim's lecture, a valid kernel should be positive semidefinite (i.e., a Hermitian matrix whose eigenvalues are nonnegative). One way to make sure that our kernels are positive semidefinite is to add a sufficiently large value to the diagonal. For example, you can add the absolute value of the smallest eigenvalue to the diagonal. Once the validity of the kernels is established, each of them can simply be added together to produce a combined kernel.
@@ -264,7 +281,7 @@ Plotting the graph can take some time, so I've simply included an image of it be
 library(igraph)
 g = graph_from_adjacency_matrix(mc, mode = "undirected", weighted = TRUE, diag = FALSE)
 
-plot.igraph(g, vertex.size = 5, vertex.label = NA, curved = T)
+plot.igraph(g, edge.width = E(g)$weight/(max(E(g)$weight)/5), vertex.label = NA, vertex.size = 5, edge.curved = T)
 ```
 
 <p style="text-align:center;"><img src="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/resources/labgraph.png" width="500px" /></p>

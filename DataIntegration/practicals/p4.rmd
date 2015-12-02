@@ -43,8 +43,12 @@ write.table(merge(mc_edge,linkcomm_edgelist,by=c("node1","node2")), file="graph.
 > Analyze the
 >
 > Some things to try:
+>
 > - Layout the network with different algorithms
-> - Color each edge according to its
+>
+> - Color each edge according to its link community membership
+>
+> - 
 
 <div id='hint'>
 <h5 class="ui-closed" style="color:blue">Hint</h5>

@@ -56,10 +56,40 @@ mc = normalizeKernel(mc)
 # some rounding errors, make symmetric
 # mc[lower.tri(mc)] = mc[upper.tri(mc)]
 
+g_BP = graph_from_edgelist(as.matrix(filter(data, BP_resnik>0)[,c("gene1","gene2")]), directed=F)
+E(g_BP)$weight = filter(data, BP_resnik>0)[,"BP_resnik"]
+pdf(file="~/Documents/git/Teaching/DataIntegration/lectures/resources/BPresnik_graph.pdf")
+  plot.igraph(g_BP, edge.width = E(g_BP)$weight/(max(E(g_BP)$weight)/5), vertex.label = NA, vertex.size = 5, edge.curved = T)
+dev.off()
+
+g_coda80 = graph_from_edgelist(as.matrix(filter(data, CODA80>0)[,c("gene1","gene2")]), directed=F)
+E(g_coda80)$weight = filter(data, CODA80>0)[,"CODA80"]
+pdf(file="~/Documents/git/Teaching/DataIntegration/lectures/resources/coda80_graph.pdf")
+  plot.igraph(g_coda80, edge.width = E(g_coda80)$weight/(max(E(g_coda80)$weight)/5), vertex.label = NA, vertex.size = 5, edge.curved = T)
+dev.off()
+
+g_hippo = graph_from_edgelist(as.matrix(filter(data, HIPPO>0)[,c("gene1","gene2")]), directed=F)
+E(g_hippo)$weight = filter(data, HIPPO>0)[,"HIPPO"]
+pdf(file="~/Documents/git/Teaching/DataIntegration/lectures/resources/hippo_graph.pdf")
+  plot.igraph(g_hippo, edge.width = E(g_hippo)$weight/(max(E(g_hippo)$weight)/5), vertex.label = NA, vertex.size = 5, edge.curved = T)
+dev.off()
+
+g_PI = graph_from_edgelist(as.matrix(filter(data, PI>0)[,c("gene1","gene2")]), directed=F)
+E(g_PI)$weight = filter(data, PI>0)[,"PI"]
+pdf(file="~/Documents/git/Teaching/DataIntegration/lectures/resources/PI_graph.pdf")
+  plot.igraph(g_PI, edge.width = E(g_PI)$weight/(max(E(g_PI)$weight)/.5), vertex.label = NA, vertex.size = 5, edge.curved = T)
+dev.off()
+
+g_TM = graph_from_edgelist(as.matrix(filter(data, TM>0)[,c("gene1","gene2")]), directed=F)
+E(g_TM)$weight = filter(data, TM>0)[,"TM"]
+pdf(file="~/Documents/git/Teaching/DataIntegration/lectures/resources/TM_graph.pdf")
+  plot.igraph(g_TM, edge.width = E(g_TM)$weight/(max(E(g_TM)$weight)/5), vertex.label = NA, vertex.size = 5, edge.curved = T)
+dev.off()
+
 g = graph_from_adjacency_matrix(mc, mode = "undirected", weighted = TRUE, diag = FALSE)
 
-pdf(file="~/Documents/Teaching/DataIntegration/lab_graph.pdf")
-  plot.igraph(g, edge.width = E(g)$weight/(max(E(g)$weight)/5), vertex.label = NA, vertex.size = 5)
+pdf(file="~/Documents/git/Teaching/DataIntegration/lectures/resources/labgraph.pdf")
+  plot.igraph(g, edge.width = E(g)$weight/(max(E(g)$weight)/5), vertex.label = NA, vertex.size = 5, edge.curved = T)
 dev.off()
 
 tmp_c = rep(1,length(mc_spcc2))
