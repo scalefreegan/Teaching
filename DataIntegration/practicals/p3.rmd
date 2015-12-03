@@ -207,20 +207,33 @@ Q = unlist(lapply(seq(2,20,1),function(i){
 }))
 names(Q) = as.character(seq(2,20,1))
 
-plot(names(Q),Q, pch = 20, ylab = "Modularity (Q)", xlab = "# Clusters", xlim = c(1,20))
+plot(names(Q),Q, type = "l", ylab = "Modularity (Q)", xlab = "# Clusters", xlim = c(1,20))
+points(names(Q),Q, pch = 20)
 Qmax = which(Q == max(Q))
-points(names(Qmax), modularity[Qmax], col = "red")
-text(as.numeric(names(Qmax)) + 75, modularity[Qmax], paste0("Max = ", names(qm)," clusters"), col = "red")
+points(names(Qmax), Q[Qmax], col = "red")
+text(as.numeric(names(Qmax)) + 3, Q[Qmax], paste0("Max = ", names(Qmax)," clusters"), col = "red")
 ```
 
 Because it takes much longer to compute these statistics on the full network, I've simply include the results below. As you can see, there is a peak at 17 clusters, which is why it was selected for our analysis in the [second practical session](http://scalefreegan.github.io/Teaching/DataIntegration/practicals/p2.html).
 
-<p style="text-align:center;"><img src="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/resources/modularity.png" width="500px" /></p>
+<p style="text-align:center;"><img src="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/resources/modularity.png" width="400px" /></p>
 
 ## Link-community clustering
 
-<p style="text-align:center;"><img src="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/resources/modularity.png" width="500px" /></p>
+A quick note about how the communities are chosen for link-community clustering. The approach taken by the `linkcomm` R package is very similar to modularity maximization. In short, a similarity score is computed between every pair of edges in the network (using either the Jaccard of Tanimoto similarity coefficient described in the [lecture]((http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l3.html))). Each of the edges is then clustered using hierarchical clustering. Finally, the hierarchical clustering dendrogram is then cut so as the maximize the density of links within the clusters after normalizing against the maximum and minimum numbers of links possible in each cluster. More formally:
+
+$$ D_{i} = \frac{e_i - n_i + 1}{(n_i(n_i-1)/2)-n_i+1} $$
+
+were $e_i$ is the number of edges in community $i$ and $n_i$ is the number of nodes in community $i$
+
+A visual representation of the approach is included in the `linkcomm` [vignette](https://cran.r-project.org/web/packages/linkcomm/vignettes/linkcomm.pdf) and below:
+
+<p style="text-align:center;"><img src="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/resources/linkcomm_hclust.png" width="400px" /></p>
+
+The results for our network look like this:
+
+<p style="text-align:center;"><img src="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/resources/linkcomm.png" width="400px" /></p>
 
 # Summary
 
-We've seen 3 approaches to estimating the number of clusters. There are countless of approaches. It should be clear that selecting the number of clusters is one of the most nuanced and (often) subjective components of clustering-based approaches. Hopefully you have now mastered several analytical tools to make this process more quantitative.
+We've seen 3 approaches to estimating the number of clusters. There are countless other approaches. It should be clear that selecting the number of clusters is one of the most nuanced and (often) subjective components of clustering. Hopefully you have now mastered several analytical tools to make this process more quantitative.
