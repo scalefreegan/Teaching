@@ -16,35 +16,113 @@ output:
 
 [Home](http://scalefreegan.github.io/Teaching/DataIntegration/)
 
-In this final lesson we will apply tools to visualize and interpret the community structure of our networks. Because the link communities produce structures that are more appealing for visual analysis (e.g., overlapping communities), we will focus on visualization and interpretation of these clusters, although in principle the same approaches could be applied to the spectral clusters as well.
+In this final lesson we will apply tools to visualize and interpret the community structure of our networks.
+
+Because link communities are more appealing for visual analysis (e.g., overlapping communities), we will focus on visualization and interpretation of these clusters, although in principle the same approaches could be applied to the spectral clusters as well.
+
+If you haven't done so already, please load the R libraries and data from the previous practical session:
+
+```{r message = FALSE}
+# libraries
+library(pheatmap)
+library(dplyr)
+library(reshape2)
+library(igraph)
+library(linkcomm)
+library(kernlab)
+```
+
+```{r message = FALSE}
+# data
+GITHUBDIR = "https://github.com/scalefreegan/Teaching/raw/master/DataIntegration/data/"
+load(url(paste(GITHUBDIR, "data.rda", sep = ""), method = "libcurl"))
+load(url(paste(GITHUBDIR, "kernel.rda", sep = ""), method = "libcurl"))
+load(url(paste(GITHUBDIR, "g_linkcomm.rda", sep = ""), method = "libcurl"))
+```
 
 # Visualizing link-community clusters
 
 ## Node centrality
 
+## Community modularity
+
+>
+> Compute community modularity. Print the 5 communities with the highest modularity
+>
+> Community modularity with the function `getCommunityConnectedness`
+>
+> Why are values for two of the communities so much higher than the others?
+>
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
+```{r  message = FALSE}
+cm <- getCommunityConnectedness(g_linkcomm, conn = "modularity")
+```
+
+```{r echo = FALSE}
+library(knitr)
+kable(as.data.frame(t(sort(cm)[1:5])), format = "markdown")
+```
+</div>
+
+```{r fig.align = "center", fig.height = 5, fig.width = 5, eval = FALSE}
+plot(g_linkcomm, type = "graph", shownodesin = 0, node.pies = TRUE, vlabel=F, verbose = FALSE)
+```
+
+<p style="text-align:center;"><img src="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/resources/linkcomm_graphviz.png" width="500px" /></p>
+
 # Cluster Interpretation
+
+For the remainder of the course, we will use Cytoscape to perform an extended analysis of the integrated graph kernel network and the communities derived from it by link-community detection.
 
 ## Export to Cytoscape
 
 >
 > Export the graph and link community annotations to Cytoscape. For the purpose of this exercise, only keep the edges that are assigned to a community by link community clustering.
 >
-> The community IDs can be accessing the `edge` attribute of the linkcomm object, e.g. `g_linkcomm$edges`
+> The community IDs can be accessing the `edges` attribute of the linkcomm object, e.g. `g_linkcomm$edges`
+>
+> In the *Solution* below I have also written out the evidence codes for each edge.
 >
 
 <div id='hint'>
 <h5 class="ui-closed" style="color:blue">Solution</h5>
-```{r eval = FALSE}
-# link communities
+```{r }
 mc_edge = as_edgelist(g)
 mc_edge = data.frame(node1 = mc_edge[,1], node2 = mc_edge[,2], weight = E(g)$weight)
 linkcomm_edgelist = g_linkcomm$edges
-write.table(merge(mc_edge,linkcomm_edgelist,by=c("node1","node2")), file="graph.txt", sep = "\t", quote = F, col.names=T, row.names = F)
+towrite = merge(mc_edge,linkcomm_edgelist,by = c("node1","node2"))
+towrite = merge(towrite, data, by.x = c("node1","node2"), by.y = c("gene1","gene2"))
+```
+
+```{r eval = FALSE}
+write.table(towrite, file = "graph.txt", sep = "\t", quote = F, col.names=T, row.names = F)
 ```
 </div>
 
+As a sanity check, you might check to see whether the link community network (which is a sub-network of the entire kernel matrix) has an over-representation of one of the original sources of information (e.g., only contains evidences from protein-protein interactions)
+
+> Is the link community network biased for a particular kind of evidence?
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
+
+```{r echo = FALSE}
+mnames = c("BP_resnik", "CODA80", "HIPPO", "PI", "TM")
+```
+
+Metric   | Full Network (%)                                                | Link Community Network (%)
+---------|-----------------------------------------------------------------|------------------------------------------------------------------
+BP       | `r sum(!is.na(data[,"BP_resnik"]))/sum(!is.na(data[,mnames]))`  | `r sum(!is.na(towrite[,"BP_resnik"]))/sum(!is.na(towrite[,mnames]))`
+CODA80   | `r sum(!is.na(data[,"CODA80"]))/sum(!is.na(data[,mnames]))`     | `r sum(!is.na(towrite[,"CODA80"]))/sum(!is.na(towrite[,mnames]))`
+HIPPO    | `r sum(!is.na(data[,"HIPPO"]))/sum(!is.na(data[,mnames]))`      | `r sum(!is.na(towrite[,"HIPPO"]))/sum(!is.na(towrite[,mnames]))`
+PI       | `r sum(!is.na(data[,"PI"]))/sum(!is.na(data[,mnames]))`         | `r sum(!is.na(towrite[,"PI"]))/sum(!is.na(towrite[,mnames]))`
+TM       | `r sum(!is.na(data[,"TM"]))/sum(!is.na(data[,mnames]))`         | `r sum(!is.na(towrite[,"TM"]))/sum(!is.na(towrite[,mnames]))`
+</div>
+
 >
-> Analyze the
+> Analyze the link-community network. Apply techniques you learned in Matt's first lecture to extend our analysis of the networks.
 >
 > Some things to try:
 >
@@ -52,10 +130,17 @@ write.table(merge(mc_edge,linkcomm_edgelist,by=c("node1","node2")), file="graph.
 >
 > - Color each edge according to its link community membership
 >
-> -
+> - Inspect edges of related clusters. Did they originate from similar sources of information?
+>
+> - Use BiNGO to compute GO enrichment for subnetworks.
+>
+> You can find a version I made [here](https://github.com/scalefreegan/Teaching/raw/master/DataIntegration/data/graph.cys)
+>
 
 <div id='hint'>
 <h5 class="ui-closed" style="color:blue">Solution</h5>
 <p>You're on your own for this one!</p>
 <iframe src="//giphy.com/embed/OOZLyBA9Euq2I?html5=true" width="480" height="345" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="http://giphy.com/gifs/power-rangers-morphin-OOZLyBA9Euq2I">via GIPHY</a></p>
 </div>
+
+### Please take the online [course survey](https://www.surveymonkey.com/r/PQDT9F6) to help me make this course better!

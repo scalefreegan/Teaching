@@ -83,6 +83,7 @@ img {
 <ul>
 <li><a href="#visualizing-link-community-clusters">Visualizing link-community clusters</a><ul>
 <li><a href="#node-centrality">Node centrality</a></li>
+<li><a href="#community-modularity">Community modularity</a></li>
 </ul></li>
 <li><a href="#cluster-interpretation">Cluster Interpretation</a><ul>
 <li><a href="#export-to-cytoscape">Export to Cytoscape</a></li>
@@ -92,43 +93,142 @@ img {
 
 <p><a href="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l4.html">Companion lecture</a></p>
 <p><a href="http://scalefreegan.github.io/Teaching/DataIntegration/">Home</a></p>
-<p>In this final lesson we will apply tools to visualize and interpret the community structure of our networks. Because the link communities produce structures that are more appealing for visual analysis (e.g., overlapping communities), we will focus on visualization and interpretation of these clusters, although in principle the same approaches could be applied to the spectral clusters as well.</p>
+<p>In this final lesson we will apply tools to visualize and interpret the community structure of our networks.</p>
+<p>Because link communities are more appealing for visual analysis (e.g., overlapping communities), we will focus on visualization and interpretation of these clusters, although in principle the same approaches could be applied to the spectral clusters as well.</p>
+<p>If you haven’t done so already, please load the R libraries and data from the previous practical session:</p>
+<pre class="r"><code># libraries
+library(pheatmap)
+library(dplyr)
+library(reshape2)
+library(igraph)
+library(linkcomm)
+library(kernlab)</code></pre>
+<pre class="r"><code># data
+GITHUBDIR = &quot;https://github.com/scalefreegan/Teaching/raw/master/DataIntegration/data/&quot;
+load(url(paste(GITHUBDIR, &quot;data.rda&quot;, sep = &quot;&quot;), method = &quot;libcurl&quot;))
+load(url(paste(GITHUBDIR, &quot;kernel.rda&quot;, sep = &quot;&quot;), method = &quot;libcurl&quot;))
+load(url(paste(GITHUBDIR, &quot;g_linkcomm.rda&quot;, sep = &quot;&quot;), method = &quot;libcurl&quot;))</code></pre>
 <div id="visualizing-link-community-clusters" class="section level1">
 <h1>Visualizing link-community clusters</h1>
 <div id="node-centrality" class="section level2">
 <h2>Node centrality</h2>
 </div>
-</div>
-<div id="cluster-interpretation" class="section level1">
-<h1>Cluster Interpretation</h1>
-<div id="export-to-cytoscape" class="section level2">
-<h2>Export to Cytoscape</h2>
+<div id="community-modularity" class="section level2">
+<h2>Community modularity</h2>
 <blockquote>
-<p>Export the graph and link community annotations to Cytoscape. For the purpose of this exercise, only keep the edges that are assigned to a community by link community clustering.</p>
-<p>The community IDs can be accessing the <code>edge</code> attribute of the linkcomm object, e.g. <code>g_linkcomm$edges</code></p>
+<p>Compute community modularity. Print the 5 communities with the highest modularity</p>
+<p>Community modularity with the function <code>getCommunityConnectedness</code></p>
+<p>Why are values for two of the communities so much higher than the others?</p>
 </blockquote>
 <div id="hint">
 <h5 class="ui-closed" style="color:blue">
 Solution
 </h5>
-<pre class="r"><code># link communities
-mc_edge = as_edgelist(g)
+<pre class="r"><code>cm &lt;- getCommunityConnectedness(g_linkcomm, conn = &quot;modularity&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">258</th>
+<th align="right">261</th>
+<th align="right">91</th>
+<th align="right">88</th>
+<th align="right">90</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.0037951</td>
+<td align="right">0.0044413</td>
+<td align="right">0.0050239</td>
+<td align="right">0.0050265</td>
+<td align="right">0.00591</td>
+</tr>
+</tbody>
+</table>
+</div>
+<pre class="r"><code>plot(g_linkcomm, type = &quot;graph&quot;, shownodesin = 0, node.pies = TRUE, vlabel=F, verbose = FALSE)</code></pre>
+</div>
+</div>
+<div id="cluster-interpretation" class="section level1">
+<h1>Cluster Interpretation</h1>
+<p>For the remainder of the course, we will use Cytoscape to perform an extended analysis of the integrated graph kernel network and the communities derived from it by link-community detection.</p>
+<div id="export-to-cytoscape" class="section level2">
+<h2>Export to Cytoscape</h2>
+<blockquote>
+<p>Export the graph and link community annotations to Cytoscape. For the purpose of this exercise, only keep the edges that are assigned to a community by link community clustering.</p>
+<p>The community IDs can be accessing the <code>edges</code> attribute of the linkcomm object, e.g. <code>g_linkcomm$edges</code></p>
+<p>In the <em>Solution</em> below I have also written out the evidence codes for each edge.</p>
+</blockquote>
+<div id="hint">
+<h5 class="ui-closed" style="color:blue">
+Solution
+</h5>
+<pre class="r"><code>mc_edge = as_edgelist(g)
 mc_edge = data.frame(node1 = mc_edge[,1], node2 = mc_edge[,2], weight = E(g)$weight)
 linkcomm_edgelist = g_linkcomm$edges
-write.table(merge(mc_edge,linkcomm_edgelist,by=c(&quot;node1&quot;,&quot;node2&quot;)), file=&quot;graph.txt&quot;, sep = &quot;\t&quot;, quote = F, col.names=T, row.names = F)</code></pre>
+towrite = merge(mc_edge,linkcomm_edgelist,by = c(&quot;node1&quot;,&quot;node2&quot;))
+towrite = merge(towrite, data, by.x = c(&quot;node1&quot;,&quot;node2&quot;), by.y = c(&quot;gene1&quot;,&quot;gene2&quot;))</code></pre>
+<pre class="r"><code>write.table(towrite, file = &quot;graph.txt&quot;, sep = &quot;\t&quot;, quote = F, col.names=T, row.names = F)</code></pre>
+</div>
+<p>As a sanity check, you might check to see whether the link community network (which is a sub-network of the entire kernel matrix) has an over-representation of one of the original sources of information (e.g., only contains evidences from protein-protein interactions)</p>
+<blockquote>
+<p>Is the link community network biased for a particular kind of evidence?</p>
+</blockquote>
+<div id="hint">
+<h5 class="ui-closed" style="color:blue">
+Solution
+</h5>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Metric</th>
+<th align="left">Full Network (%)</th>
+<th align="left">Link Community Network (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">BP</td>
+<td align="left">0.0769166</td>
+<td align="left">0.075859</td>
+</tr>
+<tr class="even">
+<td align="left">CODA80</td>
+<td align="left">0.0231004</td>
+<td align="left">0.0464079</td>
+</tr>
+<tr class="odd">
+<td align="left">HIPPO</td>
+<td align="left">0.1211711</td>
+<td align="left">0.1075413</td>
+</tr>
+<tr class="even">
+<td align="left">PI</td>
+<td align="left">0.7052801</td>
+<td align="left">0.6684516</td>
+</tr>
+<tr class="odd">
+<td align="left">TM</td>
+<td align="left">0.0735319</td>
+<td align="left">0.1017403</td>
+</tr>
+</tbody>
+</table>
 </div>
 <blockquote>
-<p>Analyze the</p>
+<p>Analyze the link-community network. Apply techniques you learned in Matt’s first lecture to extend our analysis of the networks.</p>
 <p>Some things to try:</p>
 <ul>
 <li><p>Layout the network with different algorithms</p></li>
 <li><p>Color each edge according to its link community membership</p></li>
-<li></li>
+<li><p>Inspect edges of related clusters. Did they originate from similar sources of information?</p></li>
+<li><p>Use BiNGO to compute GO enrichment for subnetworks.</p></li>
 </ul>
+<p>You can find a version I made <a href="https://github.com/scalefreegan/Teaching/raw/master/DataIntegration/data/graph.cys">here</a></p>
 </blockquote>
 <div id="hint">
 <h5 class="ui-closed" style="color:blue">
-Hint
+Solution
 </h5>
 <p>
 You’re on your own for this one!
@@ -138,6 +238,9 @@ You’re on your own for this one!
 <p>
 <a href="http://giphy.com/gifs/power-rangers-morphin-OOZLyBA9Euq2I">via GIPHY</a>
 </p>
+</div>
+<div id="please-take-the-online-course-survey-to-help-me-make-this-course-better" class="section level3">
+<h3>Please take the online <a href="https://www.surveymonkey.com/r/PQDT9F6">course survey</a> to help me make this course better!</h3>
 </div>
 </div>
 </div>
