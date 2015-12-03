@@ -1,0 +1,17 @@
+---
+title: "Data mining and integration with networks"
+subtitle: "Cluster detection, analysis and visualization"
+output:
+  html_document
+
+---
+<br>
+<br>
+<p style="text-align:center;"><img src="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/resources/component_graphs.png" width="500px" /></p>
+
+## Lessons
+
+1. Introduction. [[Lecture]](http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l1.html) [[Practical]](http://scalefreegan.github.io/Teaching/DataIntegration/practicals/p1.html)
+2. Cluster Detection. [[Lecture]](http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l2.html) [[Practical]](http://scalefreegan.github.io/Teaching/DataIntegration/practicals/p2.html)
+3. Cluster Evaluation. [[Lecture]](http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l3.html) [[Practical]](http://scalefreegan.github.io/Teaching/DataIntegration/practicals/p3.html)
+4. Cluster Visualization and Interpretation. [[Lecture]](http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l4.html) [[Practical]](http://scalefreegan.github.io/Teaching/DataIntegration/practicals/p4.html)
