@@ -17,6 +17,8 @@ devtools::source_url("https://raw.githubusercontent.com/scalefreegan/Teaching/ma
 ```
 [Companion lecture](http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l1.html)
 
+[Home](http://scalefreegan.github.io/Teaching/DataIntegration/)
+
 # Introduction
 
 Welcome to the first practical lesson for the **clustering** section of the EMBL course: *Data mining and integration with networks*.
@@ -170,13 +172,13 @@ Before moving on to the next lecture, we will process Jean-Karim's similarity ke
 
 To remind you, Jean-Karim has provided us with several graph kernels that measure similarities between 120 human genes according to information derived from 5 sources. These sources include:
 
-Type   | Description
--------|------------------------------------------------------------------------------------
-BP     | Pairwise gene semantic similarities (Resnik score) in the biological process domain
-CODA80 | Predicted protein interactions from domain co-occurrence/fusion events
-HIPPO  | Protein interactions transferred from model organisms to human by orthology
-PI     | Protein interactions in human (from multiple databases)
-TM     | Protein interactions derived from the iHOP text mining method
+Type   | Description                                                                            | # Edges
+-------|----------------------------------------------------------------------------------------|----------------------------------
+BP     | Pairwise gene semantic similarities (Resnik score) in the biological process domain    | `r sum(!is.na(data$BP_resnik))`
+CODA80 | Predicted protein interactions from domain co-occurrence/fusion events                 | `r sum(!is.na(data$CODA80))`
+HIPPO  | Protein interactions transferred from model organisms to human by orthology            | `r sum(!is.na(data$HIPPO))`
+PI     | Protein interactions in human (from multiple databases)                                | `r sum(!is.na(data$PI))`
+TM     | Protein interactions derived from the iHOP text mining method                          | `r sum(!is.na(data$TM))`
 
 The 120 genes in our data set were chosen for their role in the following biological processes:
 

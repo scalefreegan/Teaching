@@ -14,6 +14,8 @@ output:
 
 [Companion lecture](http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l3.html)
 
+[Home](http://scalefreegan.github.io/Teaching/DataIntegration/)
+
 # Choosing **k**
 
 One of the most difficult aspects of clustering is choosing the "correct" number of clusters.
@@ -197,7 +199,9 @@ plot.igraph(g_small, vertex.label = NA, layout = g_layout)
 > Plot Q vs. the number of clusters. How many clusters would you choose based on the results?
 >
 
-```{r fig.align = "center", fig.height = 4, fig.width = 6.5, echo = FALSE}
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
+```{r fig.align = "center", fig.height = 4, fig.width = 6.5, echo = TRUE}
 Q = unlist(lapply(seq(2,20,1),function(i){
   mc2_specc = specc(as.kernelMatrix(mc2), centers=i)
   v = as.data.frame(factor(mc2_specc))
@@ -213,6 +217,7 @@ Qmax = which(Q == max(Q))
 points(names(Qmax), Q[Qmax], col = "red")
 text(as.numeric(names(Qmax)) + 3, Q[Qmax], paste0("Max = ", names(Qmax)," clusters"), col = "red")
 ```
+</div>
 
 Because it takes much longer to compute these statistics on the full network, I've simply include the results below. As you can see, there is a peak at 17 clusters, which is why it was selected for our analysis in the [second practical session](http://scalefreegan.github.io/Teaching/DataIntegration/practicals/p2.html).
 
@@ -220,15 +225,14 @@ Because it takes much longer to compute these statistics on the full network, I'
 
 ## Link-community clustering
 
-A quick note about how the communities are chosen for link-community clustering. The approach taken by the `linkcomm` R package is very similar to modularity maximization. In short, a similarity score is computed between every pair of edges in the network (using either the Jaccard of Tanimoto similarity coefficient described in the [lecture]((http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l3.html))). Each of the edges is then clustered using hierarchical clustering. Finally, the hierarchical clustering dendrogram is then cut so as the maximize the density of links within the clusters after normalizing against the maximum and minimum numbers of links possible in each cluster. More formally:
+A quick note about how the communities are chosen for link-community clustering. The approach taken by the `linkcomm` R package is very similar to modularity maximization. In short, a similarity score is computed between every pair of edges in the network (using either the Jaccard or Tanimoto similarity coefficients as described in the [lecture]((http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l3.html))). Each of the edges is then clustered using hierarchical clustering. Finally, the hierarchical clustering dendrogram is then cut so as the maximize the density of links within the clusters after normalizing against the maximum and minimum numbers of links possible in each cluster. More formally:
 
 $$ D_{i} = \frac{e_i - n_i + 1}{(n_i(n_i-1)/2)-n_i+1} $$
 
 were $e_i$ is the number of edges in community $i$ and $n_i$ is the number of nodes in community $i$
 
-A visual representation of the approach is included in the `linkcomm` [vignette](https://cran.r-project.org/web/packages/linkcomm/vignettes/linkcomm.pdf) and below:
-
-<p style="text-align:center;"><img src="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/resources/linkcomm_hclust.png" width="400px" /></p>
+A visual representation of the approach is included in the `linkcomm` [vignette](https://cran.r-project.org/web/packages/linkcomm/vignettes/linkcomm.pdf) and below:<br>
+<p style="text-align:center;"><img src="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/resources/linkcomm_clust_c.png" width="500px" /></p>
 
 The results for our network look like this:
 
