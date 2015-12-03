@@ -18,6 +18,8 @@ output:
 
 [Companion lecture](http://scalefreegan.github.io/Teaching/DataIntegration/lectures/l2.html)
 
+[Home](http://scalefreegan.github.io/Teaching/DataIntegration/)
+
 At the end of the previous session, we processed Jean-Karim's graph kernels, combining them into a single graph. In this session, we will apply two clustering techniques to the integrated data: spectral clustering and link-community clustering.
 
 # Spirals: Spectral Clustering
