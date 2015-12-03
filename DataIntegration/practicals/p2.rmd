@@ -283,7 +283,7 @@ plot.igraph(g_small,vertex.label=NA,vertex.color=v_small[names(V(g_small)), ], l
 <h5 class="ui-closed" style="color:blue">Solution</h5>
 ```{r fig.align = "center", fig.height = 5}
 diag(mc2) = 0
-pheatmap(mc2, annotation = v_small, show_rownames = F, show_colnames = F)
+pheatmap(mc2[rownames(v_small)[order(v_small[,1])],rownames(v_small)[order(v_small[,1])]], annotation = v_small, show_rownames = F, show_colnames = F, cluster_rows = F, cluster_cols = F)
 ```
 </div>
 
@@ -298,6 +298,7 @@ Having evaluated the behavior of spectral clustering on a small example, we will
 >
 > As before, make an annotation data.frame, **v**, to store each of the cluster assignments
 >
+> Plot the graph, coloring the nodes according to their cluster membership
 
 <div id='hint'>
 <h5 class="ui-closed" style="color:blue">Solution</h5>
@@ -308,6 +309,8 @@ rownames(v) = rownames(mc)
 colors = c(RColorBrewer::brewer.pal(9,"Set1"),RColorBrewer::brewer.pal(9,"Set3"),RColorBrewer::brewer.pal(8,"Set2"))
 plot.igraph(g,vertex.label=NA,vertex.color=v[names(V(g)), ], edge.curved = T, vertex.size = 7, palette = colors)
 ```
+<p style="text-align:center;"><img src="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/resources/cgraph.png" width="500px" /></p>
+
 </div>
 
 You will notice that I have provided you with the number of clusters (or centers) to detect in the dataset. In the following lecture and tutorial you will see how I selected this value.

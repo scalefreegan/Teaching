@@ -1,5 +1,5 @@
 ---
-title: "Practical 3: Cluster Evaluation and Analysis"
+title: "Practical 3: Cluster Evaluation"
 subtitle: "EMBL Course: Data mining and integration with networks"
 author: "Aaron Brooks"
 date: "This should take about 20 minutes"
@@ -20,27 +20,207 @@ One of the most difficult aspects of clustering is choosing the "correct" number
 
 We have seen in the previous practicals how this can be accomplished informally by simple visual inspection of the data, for example. In other cases, the number of clusters may be motivated by the problem itself, i.e. some kind of prior expectation about the number of clusters. In most cases, however, you will want to have a more formal criteria with which to evaluate the *goodness* of clustering at a given **k**. Many methods and metrics have been proposed to accomplish this task. Here we will focus on three methods: the naive elbow method, spectral gap, and modularity maximization.
 
+Remember from the lectures that the overarching goal of clustering is to find "compact" groupings of the data (in some space). Most methods for choosing, **k** - unsurprisingly - try to determine the value of **k** that maximizes the  **intra**-cluster (within) *similarity* while also maximizing the **inter**-cluster (between) *DISsimilarity*.
+
+If you haven't done so already, please load the R libraries and data from the previous practical session, particularly the combined kernel matrix, **mc**.
+
+```{r message = FALSE}
+# libraries
+library(pheatmap)
+library(dplyr)
+library(reshape2)
+library(igraph)
+library(linkcomm)
+library(kernlab)
+```
+
+```{r message = FALSE}
+# data
+GITHUBDIR = "https://github.com/scalefreegan/Teaching/raw/master/DataIntegration/data/"
+load(url(paste(GITHUBDIR, "kernel.rda", sep = ""), method = "libcurl"))
+```
+
 ## Elbow method
+
+We will start with the most simple method for estimating the number of clusters in our data, the elbow method. It should be noted from the outset that *this method rarely works*, except for relatively simple datasets. It should also be noted that there are many joint-like appendage methods (i.e. elbows and knees) based on different quantifications of the change in the "goodness" of the clustering at different values of **k**. Nevertheless it's worthwhile to see how it works to develop an intuition for how one might select the number of clusters.
+
+The elbow method tries to find a sweet spot where the amount of variance explained by adding an additional cluster doesn't increase significantly. As the name suggests, this is "detected" by observing a change in the slope between points in a graph of the percent variance explained vs number of clusters.
+
+The percent variance explained can be calculated by the ratio of the between-group variance (sum of squares) to the total variance or:
+
+$$ D_k = \sum_{x_i \in C_k} \sum_{x_j \in C_k} ||x_i-x_j||^2 = 2n_k \sum_{x_i \in C_k} ||x_i-\mu_k||^2  $$
+
+$$ W_k = \sum_{k = 1}^{k} \frac{1}{2n_k} D_k$$
+
+>
+> Plot the ratio of between-group variance explained to the total variance versus **k** for 2 to 10 clusters in the `iris` dataset for the features `Sepal.Length` and `Sepal.Width`
+>
+> Between-group variance can be accessed from a `kmeans` object with `$tot.withinss`. Likewise total variance is accessed with `$totss`
+>
+> How many clusters would you choose based on the results?
+>
+> How would you apply this method to determine **k** in the context of spectral clustering?
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
+<div id='hint'>
+```{r fig.align = "center", fig.height = 4, fig.width = 6.5, echo = FALSE}
+
+Wk = unlist(lapply(seq(2,10),function(i){
+  km = kmeans(cbind(iris$Sepal.Length, iris$Sepal.Width), centers = i)
+  return( 1-km$tot.withinss/km$totss )
+}))
+plot(seq(2,10), Wk, type = "l", xlim = c(1,10), lty = 1, xlab = "# Clusters", ylab = "% Variance Explained (1 - tot.withinss/totss)")
+points(seq(2,10), Wk, pch = 19)
+```
+</div>
+
+A better way to do this is to use a null reference with no obvious clusters (e.g. multiple uniform Monte Carlo samples taken from a bounding box around the data) and then to use **k** at which there is maximal deviation from this curve wihtin the actual data as a way to select **k**. This is called the [gap statistic](http://web.stanford.edu/~hastie/Papers/gap.pdf).
 
 ## Spectral gap
 
+We will quickly focus on another type of gap statistic that is relevant for spectral clustering. In spectral clustering, one way to identify the number of clusters is to plot the eigenvalue spectrum. If the clusters are clearly defined, there should be a "gap" in the smallest eigenvalues at the "optimal" **k**. This is related to the idea that if good clusters can be identified in the matrix, then the Laplacian will be approximately block-diagonal.
+
+We will look at the eigenvalue spectrum for spectral clustering on the spirals dataset as we performed in the [second practical](http://scalefreegan.github.io/Teaching/DataIntegration/practicals/p2.html). In case you need to run this code again, I've included it below.
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:black">Spectral clustering code</h5>
+```{r }
+data(spirals)
+
+s <- function(x1, x2, alpha=1) {
+  exp(- alpha * norm(as.matrix(x1-x2), type="F"))
+}
+
+make.affinity <- function(S, n.neighboors=2) {
+  N <- length(S[,1])
+
+  if (n.neighboors >= N) {  # fully connected
+    A <- S
+  } else {
+    A <- matrix(rep(0,N^2), ncol=N)
+    for(i in 1:N) { # for each line
+      # only connect to those points with larger similarity
+      best.similarities <- sort(S[i,], decreasing=TRUE)[1:n.neighboors]
+      for (s in best.similarities) {
+        j <- which(S[i,] == s)
+        A[i,j] <- S[i,j]
+        A[j,i] <- S[i,j] # to make an undirected graph, ie, the matrix becomes symmetric
+      }
+    }
+  }
+  A
+}
+
+make.similarity <- function(my.data, similarity) {
+  N <- nrow(my.data)
+  S <- matrix(rep(NA,N^2), ncol=N)
+  for(i in 1:N) {
+    for(j in 1:N) {
+      if (i!=j) {
+        S[i,j] <- similarity(my.data[i,], my.data[j,])
+      } else {
+        S[i,j] <- 0
+      }
+    }
+  }
+  S
+}
+
+S <- make.similarity(spirals, s)
+A <- make.affinity(S, 3)  # use 3 neighbors (includes self)
+D <- diag(apply(A, 1, sum))
+U <- D - A
+evL <- eigen(U, symmetric=TRUE)
+```
+</div>
+
+>
+> Plot the eigenvalue spectrum on the `spirals` dataset for the *4 lowest* eigenvalues
+>
+> Is there a gap? Based on this analysis how many clusters would you choose?
+>
+> Now plot the eigenvalue spectrum of the *10 lowest* eigenvalues. What do you notice now? Why?
+>
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
+
+  ```{r fig.align = "center", fig.height = 4, fig.width = 6.5, echo = FALSE}
+    plot(rev(evL$values)[1:4], pch=8, cex = 1.25, main = "Spirals eigenvalue spectrum: 4 lowest", xlab = "Index", ylab = "Value")
+  ```
+  <p>In this plot we clearly see at the expected number of clusters from our previous analysis. Plotting only the lowest 4 values, however, hides a secret.</p>
+
+  ```{r fig.align = "center", fig.height = 4, fig.width = 6.5, echo = FALSE}
+    plot(rev(evL$values)[1:10], pch=8, cex = 1.25, main = "Spirals eigenvalue spectrum: 10 lowest", xlab = "Index", ylab = "Value")
+  ```
+  <p>Here we see similar gaps occur at regular intervals (every other eigenvalue). Why is this?</p>
+</div>
+
 ## Modularity maximization
 
-Because it would take too long to compute,
+Finally, we will consider a quantification that may be more appropriate for the analysis of networks, *modularity maximization*. Modularity measures how well separated multiple subnetworks are given a particular partitioning of the network. More precisely:
 
-## Meta-communities
+$$ Q = \frac{1}{2m} \sum_{ij} A_{ij} - \frac{k_i * k_j}{2m} \delta(i, j) $$
 
-# Analyzing
+$$ \delta(i, j) =
+  \begin{cases}
+  1 & \text{if i = j} \\
+  0 & \text{otherwise}
+  \end{cases}
+$$
 
-## Node centrality
+Modularity has a [rich history](http://www.pnas.org/content/103/23/8577.full) in the analysis of community structure in networks.
 
+We'll will apply the modularity maximization method to sub-matrix, **mc2**, since it is much faster to compute. You will remember that had a topology indicating 3 clusters. This was easy to see visually.
 
+The code for computing **mc2** is included below for reference, as well as its representation as a network.
 
+```{r }
+degree = apply(mc, 1, function(i)sum(i > 0))
+n_i = which(degree == 20)[1:4]
+n = unique(c(n_i, which(mc[n_i, ] > 0, arr.ind = T)[, 2]))
+mc2 = mc[n, n]
+```
 
+```{r fig.align = "center", fig.height = 4, fig.width = 6.5, echo = FALSE}
+g_small = graph_from_adjacency_matrix(mc2, mode = "undirected", weighted = TRUE, diag = FALSE)
+g_layout = layout.fruchterman.reingold(g_small)
+plot.igraph(g_small, vertex.label = NA, layout = g_layout)
+```
 
+>
+> Compute modularity (Q) of the **mc2** network given spectral cluster partitioning for 2 to 20 clusters
+>
+> The `igraph` R package includes the function `modularity` which can be used to compute modularity. Use the graph `g_small` above.
+>
+> Plot Q vs. the number of clusters. How many clusters would you choose based on the results?
+>
 
-<div id='hint'>
-<h5 class="ui-closed" style="color:blue">Hint</h5>
-<div id='hint'>
+```{r fig.align = "center", fig.height = 4, fig.width = 6.5, echo = FALSE}
+Q = unlist(lapply(seq(2,20,1),function(i){
+  mc2_specc = specc(as.kernelMatrix(mc2), centers=i)
+  v = as.data.frame(factor(mc2_specc))
+  rownames(v) = rownames(mc2)
+  v = v[names(V(g_small)),]
+  return(modularity(g_small,v,weights=E(g_small)$weights))
+}))
+names(Q) = as.character(seq(2,20,1))
 
-</div>
+plot(names(Q),Q, pch = 20, ylab = "Modularity (Q)", xlab = "# Clusters", xlim = c(1,20))
+Qmax = which(Q == max(Q))
+points(names(Qmax), modularity[Qmax], col = "red")
+text(as.numeric(names(Qmax)) + 75, modularity[Qmax], paste0("Max = ", names(qm)," clusters"), col = "red")
+```
+
+Because it takes much longer to compute these statistics on the full network, I've simply include the results below. As you can see, there is a peak at 17 clusters, which is why it was selected for our analysis in the [second practical session](http://scalefreegan.github.io/Teaching/DataIntegration/practicals/p2.html).
+
+<p style="text-align:center;"><img src="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/resources/modularity.png" width="500px" /></p>
+
+## Link-community clustering
+
+<p style="text-align:center;"><img src="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/resources/modularity.png" width="500px" /></p>
+
+# Summary
+
+We've seen 3 approaches to estimating the number of clusters. There are countless of approaches. It should be clear that selecting the number of clusters is one of the most nuanced and (often) subjective components of clustering-based approaches. Hopefully you have now mastered several analytical tools to make this process more quantitative.

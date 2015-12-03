@@ -18,6 +18,8 @@ In this final lesson we will apply tools to visualize and interpret the communit
 
 # Visualizing link-community clusters
 
+## Node centrality
+
 # Cluster Interpretation
 
 ## Export to Cytoscape
@@ -48,7 +50,7 @@ write.table(merge(mc_edge,linkcomm_edgelist,by=c("node1","node2")), file="graph.
 >
 > - Color each edge according to its link community membership
 >
-> - 
+> -
 
 <div id='hint'>
 <h5 class="ui-closed" style="color:blue">Hint</h5>
