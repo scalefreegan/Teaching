@@ -1,5 +1,5 @@
 ---
-title: "Practical 4: Cluster Visualization and Interpretation       "
+title: "Practical 4: Cluster Visualization and Interpretation"
 subtitle: "EMBL Course: Data mining and integration with networks"
 author: "Aaron Brooks"
 date: "This should take about 20 minutes"
