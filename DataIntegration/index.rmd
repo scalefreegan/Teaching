@@ -8,6 +8,7 @@ output:
 <br>
 <br>
 <p style="text-align:center;"><img src="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/resources/component_graphs.png" width="500px" /></p>
+<p style="text-align:center;">Graph kernels for 5 data sources derived from similarities among 120 human genes related to mitosis and DNA repair</p>
 
 ## Lessons
 
