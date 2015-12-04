@@ -54,6 +54,8 @@ $$ D_k = \sum_{x_i \in C_k} \sum_{x_j \in C_k} ||x_i-x_j||^2 = 2n_k \sum_{x_i \i
 
 $$ W_k = \sum_{k = 1}^{k} \frac{1}{2n_k} D_k$$
 
+$n_k$ is the number of clusters. $\mu_k$ is the mean of each cluster.
+
 >
 > Plot the ratio of between-group variance explained to the total variance versus **k** for 2 to 10 clusters in the `iris` dataset for the features `Sepal.Length` and `Sepal.Width`
 >
@@ -171,6 +173,8 @@ $$ \delta(i, j) =
   0 & \text{otherwise}
   \end{cases}
 $$
+
+$m$ is the number of edges, $A_{ij}$ is the adjacency matrix, $k_i$ is the degree of node $i$
 
 Modularity has a [rich history](http://www.pnas.org/content/103/23/8577.full) in the analysis of community structure in networks.
 

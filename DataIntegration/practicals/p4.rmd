@@ -40,16 +40,50 @@ load(url(paste(GITHUBDIR, "kernel.rda", sep = ""), method = "libcurl"))
 load(url(paste(GITHUBDIR, "g_linkcomm.rda", sep = ""), method = "libcurl"))
 ```
 
-# Visualizing link-community clusters
+# Visualizing and Interpreting Link-community Clusters in R
 
-## Node centrality
+Link-communities can provide a richly detailed decomposition of a complex network into structured (highly-connected) communities. However, it can also be more complicated to interpret the meaning of these communities since a given node can belong to multiple communities. Here we use several tools from the `linkcomm` R package to identify highly connected nodes and communities in network and visualize them. These basic tools will serve as a starting place to dive deeper into understanding the structure of these networks.
 
-## Community modularity
+## Node Centrality
+
+A first feature that one could assess on the network. Oftentimes, one may be interested in nodes that are highly "central" or influential in the network. In the case of link communities, these are the nodes that belong to highly-connected communities that in addition also weights how similar each community to which a node belongs is to the others. Formally,
+
+$$ C_{c}(i) = \sum_{i \in j }^N \left(1-\frac{1}{m}\sum_{i \in j \cap k}^m S(j,k)\right) $$
+
+$N$ is the number of communities to which $i$ belongs, $S(j,k)$ is the similarity between community $j$ and $k$ (Jaccard coefficient for number of shared nodes), $m$ is number of communities to which nodes $j$ and $i$ jointly belong.
+
+>
+> Compute node centrality. Print the 10 nodes with the highest modularity
+>
+> Node centrality is calculated with the function `getCommunityCentrality`
+>
+> What are the most central genes? Why are they so central in our networks?
+>
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
+```{r  message = FALSE}
+cc <- getCommunityCentrality(g_linkcomm,  type = "commweight")
+```
+
+```{r echo = FALSE}
+library(knitr)
+kable(as.data.frame(t(sort(cc, decreasing = T)[1:10])), format = "markdown")
+```
+
+What are the nodes that are highly central? Perhaps the following provides some insight:
+
+```{r  message = FALSE, fig.align = "center", fig.height = 5, fig.width = 5}
+plot(cc, degree(g)[names(cc)], xlab = "Community Centrality", ylab = "Degree")
+```
+</div>
+
+## Community Modularity
 
 >
 > Compute community modularity. Print the 5 communities with the highest modularity
 >
-> Community modularity with the function `getCommunityConnectedness`
+> Community modularity is calculated with the function `getCommunityConnectedness`
 >
 > Why are values for two of the communities so much higher than the others?
 >
@@ -62,24 +96,58 @@ cm <- getCommunityConnectedness(g_linkcomm, conn = "modularity")
 
 ```{r echo = FALSE}
 library(knitr)
-kable(as.data.frame(t(sort(cm)[1:5])), format = "markdown")
+kable(as.data.frame(t(sort(cm, decreasing = T)[1:5]), format = "markdown")
 ```
 </div>
 
+## Visualization
+
+The `linkcomm` R package provides functionality for visually representing link-communities. In particular it allows one to visualize all communities to which a node jointly belongs using *node-pies*. In this case each node is represented by a pie chart that quantifies the fraction of a node's edges belonging to each community.
+
+Before plotting the whole network with this representation, which can be a bit bewildering, let's focus on a simple subnetwork. To extract this subnetwork we will use another handy function, `getClusterRelatedness`. This function is particularly useful in context of the multiscale nature of the link communities. In principle, our original edge similarity dendrogram could have been cut a multiple heights to generate communities at varying scales. The default algorithm settings chooses this point to be the height that maximizes the density of the result communities. However, we could be justified in merging these communities into larger meta-communities. Let's do that to find a sub-network to plot.
+
+>
+> Compute cluster relatedness. Cut the dendrogram using parameter `cutat = 1.5` to define metacommunities
+>
+> Plot the metacommunity of size 4 as a sub-network with `node.pies = T`.
+>
+
+```{r  message = FALSE, eval = FALSE}
+cr = getClusterRelatedness(g_linkcomm)
+c_meta = cutDendrogramAt(cr, cutat = 1.5)
+c_meta_i = which(sapply(c_meta,length)==4)
+plot(g_linkcomm, type = "graph", shownodesin = 0, node.pies = TRUE, vlabel.cex = 0.6, clusterids = c_meta[[c_meta_i]])
+```
+
+<p style="text-align:center;"><img src="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/resources/lc_mc_2.png" width="500px" /></p>
+</div>
+
+<p style="text-align:center;"><img src="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/resources/lc_small.png" width="500px" /></p>
+</div>
+
+>
+> Plot the entire linkcommunity network with `node.pies = T`.
+>
+> How does this network compare to the previous sub-network?
+>
+
+<div id='hint'>
+<h5 class="ui-closed" style="color:blue">Solution</h5>
 ```{r fig.align = "center", fig.height = 5, fig.width = 5, eval = FALSE}
-plot(g_linkcomm, type = "graph", shownodesin = 0, node.pies = TRUE, vlabel=F, verbose = FALSE)
+plot(g_linkcomm, type = "graph", shownodesin = 0, node.pies = TRUE, vlabel=F)
 ```
 
 <p style="text-align:center;"><img src="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/resources/linkcomm_graphviz.png" width="500px" /></p>
+</div>
 
-# Cluster Interpretation
+# Visualizing and Interpreting Link-community Clusters in Cytoscape
 
-For the remainder of the course, we will use Cytoscape to perform an extended analysis of the integrated graph kernel network and the communities derived from it by link-community detection.
+## Export network
 
-## Export to Cytoscape
+For the remainder of the course, Cytoscape will be used to extend our analysis of the integrated graph kernel network and the communities derived from it by link-community detection.
 
 >
-> Export the graph and link community annotations to Cytoscape. For the purpose of this exercise, only keep the edges that are assigned to a community by link community clustering.
+> Export the graph and link community annotations to Cytoscape. For the purpose of this exercise only keep the edges that are assigned to a community by link community clustering.
 >
 > The community IDs can be accessing the `edges` attribute of the linkcomm object, e.g. `g_linkcomm$edges`
 >
@@ -101,7 +169,7 @@ write.table(towrite, file = "graph.txt", sep = "\t", quote = F, col.names=T, row
 ```
 </div>
 
-As a sanity check, you might check to see whether the link community network (which is a sub-network of the entire kernel matrix) has an over-representation of one of the original sources of information (e.g., only contains evidences from protein-protein interactions)
+Before opening this network in Cytoscape, you might check to see whether the link community network (which is a sub-network of the entire kernel matrix) has an over-representation of one of the original sources of information (e.g., only contains evidences from protein-protein interactions)
 
 > Is the link community network biased for a particular kind of evidence?
 
@@ -121,6 +189,10 @@ PI       | `r sum(!is.na(data[,"PI"]))/sum(!is.na(data[,mnames]))`         | `r 
 TM       | `r sum(!is.na(data[,"TM"]))/sum(!is.na(data[,mnames]))`         | `r sum(!is.na(towrite[,"TM"]))/sum(!is.na(towrite[,mnames]))`
 </div>
 
+## Export network
+
+The network is now ready to import into Cytoscape.
+
 >
 > Analyze the link-community network. Apply techniques you learned in Matt's first lecture to extend our analysis of the networks.
 >
@@ -132,15 +204,19 @@ TM       | `r sum(!is.na(data[,"TM"]))/sum(!is.na(data[,mnames]))`         | `r 
 >
 > - Inspect edges of related clusters. Did they originate from similar sources of information?
 >
-> - Use BiNGO to compute GO enrichment for subnetworks.
+> - Use BiNGO to compute GO enrichment for obvious subnetworks.
 >
 > You can find a version I made [here](https://github.com/scalefreegan/Teaching/raw/master/DataIntegration/data/graph.cys)
 >
 
 <div id='hint'>
-<h5 class="ui-closed" style="color:blue">Solution</h5>
+<h5 class="ui-closed" style="color:blue">Stuck?</h5>
 <p>You're on your own for this one!</p>
 <iframe src="//giphy.com/embed/OOZLyBA9Euq2I?html5=true" width="480" height="345" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="http://giphy.com/gifs/power-rangers-morphin-OOZLyBA9Euq2I">via GIPHY</a></p>
 </div>
+
+# End
+
+Thanks for participating in the course.
 
 ### Please take the online [course survey](https://www.surveymonkey.com/r/PQDT9F6) to help me make this course better!
