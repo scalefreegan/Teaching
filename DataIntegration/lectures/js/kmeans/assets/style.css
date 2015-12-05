@@ -10,6 +10,8 @@ body {
   font-family: Helvetica, Arial, sans;
   padding: 20px;
   margin: 0;
+  background-color: black;
+  color: white;
 }
 
 h1 {
@@ -20,7 +22,6 @@ h4 {
 	margin-top: 0;
 	margin-bottom: 5px;
 }
-
 
 svg circle {
   fill: #AAAAAA;
