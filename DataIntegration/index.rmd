@@ -1,6 +1,7 @@
 ---
 title: "Data mining and integration with networks"
 subtitle: "Cluster detection, analysis and visualization"
+author: "Aaron Brooks"
 output:
   html_document
 

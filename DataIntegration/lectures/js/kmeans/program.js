@@ -3,7 +3,7 @@ var colors = ['coral','green','steelblue','seagreen','yellow','cyan','salmon','s
 var radius = 8;
 var trans_secs = 2;
 var update_ms = 150;
-var svg_size = {width:400,height:300};
+var svg_size = {width:600,height:500};
 
 //initialization
 var mouse_x;
