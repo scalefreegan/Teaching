@@ -3,7 +3,7 @@ var colors = ['coral','green','steelblue','seagreen','yellow','cyan','salmon','s
 var radius = 8;
 var trans_secs = 2;
 var update_ms = 150;
-var svg_size = {width:600,height:400};
+var svg_size = {width:400,height:300};
 
 //initialization
 var mouse_x;
@@ -27,8 +27,8 @@ function shuffle(o){ //v1.0
 
 function safeShuffle(o){
 	var x = new Array();
-	for(var i = 0; i < o.length; i++){ 
-		x[i] = o[i]; 
+	for(var i = 0; i < o.length; i++){
+		x[i] = o[i];
 	}
 	return shuffle(x);
 }
@@ -116,9 +116,9 @@ function moveCenters () {
 		var center = centers[i];
 		var svg_center = {x: Math.round(svg_centers[i].cx.baseVal.value),
 			y: Math.round(svg_centers[i].cy.baseVal.value)};
-		all_finalized &= (center.x == center.old_x 
-			&& center.y == center.old_y 
-			&& Math.round(center.x) == svg_center.x 
+		all_finalized &= (center.x == center.old_x
+			&& center.y == center.old_y
+			&& Math.round(center.x) == svg_center.x
 			&& Math.round(center.y) == svg_center.y
 			);
 	}
