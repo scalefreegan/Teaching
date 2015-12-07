@@ -144,6 +144,8 @@ plot(spirals, pch = 19, xlab = "", ylab = "")
 <div id='hint'>
 <h5 class="ui-closed" style="color:blue">Solution</h5>
 ```{r, eval=TRUE, fig.align="center", fig.height=4, fig.width=4}
+library(kernlab)
+data(spirals)
 km <- kmeans(spirals, centers = 2)
 plot(spirals, col = km$cluster, pch = 19, xlab = "", ylab = "")
 points(km$centers, col=1:2, pch=8, cex=2)

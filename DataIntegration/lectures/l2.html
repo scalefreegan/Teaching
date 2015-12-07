@@ -56,84 +56,188 @@
 				<!--INTRO-->
 				<!--..................-->
 				<section id="goals">
-					<h2>Goals (60 min - 30 slides)</h2>
+					<h2>Goals: Cluster Detection</h2>
 					<ul>
-						<li>Clustering in a nutshell: some way to find elements on a graph that are more related to each other than to everything else</li>
-						<li class="fragment"> Simple biological and non-biological examples (motivation, e.g. karate club, regulatory "modules")</li>
-						<li class="fragment"> Approaches to clustering: Node vs edge clustering, Hard vs soft clustering</li>
-						<li class="fragment"> Overview of topics covered / Lab data set</li>
+					  <li class="fragment">How to measure <i>similarity</i>: <span class="fragment" style="color:#e7ad52">distance measures</span></li>
+					  <li class="fragment"><span style="color:#e7ad52">Node</span>-based clustering</li>
+					  <ul>
+							<li class="fragment">Spectral clustering</li>
+						</ul>
+						<li class="fragment"><span style="color:#e7ad52">Edge</span>-based clustering</li>
+						<ul>
+							<li class="fragment">Link-community detection</li>
+						</ul>
 					</ul>
 				</section>
 
 				<section id="metric">
-					<h2>What is a metric?</h2>
-					<p>A nonnegative function g(x,y) describing the "distance" between neighboring points for a given set. A metric satisfies the triangle inequality</p>
-					<p class="fragment">$g(x,y) + g(y,z) \ge g(x,z)$</p>
-					<p class="fragment">$g(x,y) = g(y,x)$</p>
-					<p class="fragment">$g(x,x) = 0$</p>
+					<section id="whatis">
+						<h2>Clustering in a nutshell</h2>
+						<p><span style="color:#e7ad52">Some way to group elements that are more similar to each other than they are to everything else</span></p>
+						<p class="fragment">What does it mean to be <i>more similar</i>? <span class="fragment" style="color:#e7ad52">Need to define a <i>metric</i></p>
+					</section>
+					<section>
+						<h3>What is a metric?</h3>
+						<p>A nonnegative function g(x,y) describing the "distance" between neighboring points for a given set</p>
+						<p class="fragment">$g(x,y) \ge 0$</p>
+						<p class="fragment">$g(x,y) = g(y,x)$</p>
+						<p class="fragment">$g(x,y) = 0 \quad iff.\ x = y$</p>
+						<p class="fragment">$g(x,y) + g(y,z) \ge g(x,z)$</p>
+					</section>
+					<section>
+						<h3>Similarity metrics can express a broad range of relationships</h3>
+						<ul>
+							<li class="fragment">Spatial ($\ell_1$ or $\ell_2$ norm)</li>
+							<li class="fragment">Information (Hamming distance)</li>
+							<li class="fragment">Inner product space (Cosine similarity) </li>
+							<li class="fragment">Kernel function (RBF)</li>
+						</ul>
+					</section>
 				</section>
 
-				<section id="metric">
-					<h2>A formalized way to detect “similar behavior” in data</h2>
-				</section>
-
-				<section id="uga">
-					<h2>Weighted Undirected Graph</h2>
-					<img height=500 data-src="resources/uga.png">
-					<p><small><a href="http://www.stoimen.com/blog/2012/08/31/computer-algorithms-graphs-and-their-representation/">stoimen.com</a></small></p>
+				<section>
+					<section>
+							<h2>Getting started with clustering</h2>
+							<h3 class="fragment"><span style="color:#e7ad52">k-means</span></h3>
+					</section>
+					<section>
+						<iframe src="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/js/kmeans/index.html" width="800" height="600" frameBorder="0"></iframe>
+						<p><small><a href="http://www.chasestevens.com/blog/read_post.php?time=1363940538">H. Chase Stevens</a></small></p>
+					</section>
+					<section>
+						<h2>How?</h2>
+						<p><span style="color:#e7ad52">Minimize</span> $\sum_{k=1}^K \sum_{x_n \in C_k} ||x_n - \mu_k||^2$ <span style="color:#e7ad52">with respect to</span> $C_k$ and $\mu_k$</p>
+					</section>
+					<section>
+						<h2>Lloyd's algorithm: two steps</h2>
+						<p> Given $k$ and inital cluster centers, $\mu_k$
+						<ol>
+							<li class="fragment"><span style="color:#e7ad52">Assign points to closest centroid</span></li>
+							<li class="fragment"><span style="color:#e7ad52">Recalculate</span> $\mu_k$</li>
+						</ol>
+						<p class="fragment">Repeat (1) and (2) until $\sum_{k = 1}^K|\mu_{k_{t+1}} - \mu_{k_{t}}| \le \epsilon$</p>
+						<p><small>More detail at <a href="https://datasciencelab.wordpress.com/2013/12/12/clustering-with-k-means-in-python/">The Data Science Lab</a></small></p>
+					</section>
+					<section>
+						<iframe src="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/js/kmeans/index.html" width="800" height="600" frameBorder="0"></iframe>
+						<p><small><a href="http://www.chasestevens.com/blog/read_post.php?time=1363940538">H. Chase Stevens</a></small></p>
+					</section>
 				</section>
 				<!--..................-->
 				<!--SPECTRAL CLUSTERING-->
 				<!--..................-->
 				<section id="spectral">
-					<h2>Spectral Clustering</h2>
-					<p>Some advantages</p>
-					<ol>
-						<li class="fragment">Can be solved efficiently by standard linear algebra software</li>
-						<li class="fragment">Often outperforms traditional clustering algorithms such as the k-means algorithm</li>
-					</ol>
-					<p><small>Luxburg (2007). <a href="http://www.stoimen.com/blog/2012/08/31/computer-algorithms-graphs-and-their-representation/">A Tutorial on Spectral Clustering</a></small></p>
-				</section>
-				<section id="laplacian">
-					<h2>Graph Laplacians</h2>
-					<p>$L = D − W$</p>
-					<img data-src="resources/laplacian.png">
-					<p><small>Wikipedia: <a href="https://en.wikipedia.org/wiki/Laplacian_matrix">Laplacian matrix</a></small></p>
+					<section>
+						<h2>Advanced Clustering</h2>
+						<img height=400 data-src="resources/spirals.png">
+						<p style="color:#e7ad52">What if your data looks like this?</p>
+					</section>
+					<section>
+						<h2>k-means</h2>
+						<img height=400 data-src="resources/spirals1.png">
+					</section>
+					<section>
+						<h2>Spectral Clustering</h2>
+						<img height=400 data-src="resources/spirals2.png">
+					</section>
+					<section data-background="resources/cow.gif">
+					</section>
+					<section>
+						<h2>Spectral Clustering</h2>
+						<p>Some advantages</p>
+						<ol>
+							<li class="fragment">Can be solved efficiently by standard linear algebra software</li>
+							<li class="fragment">Often outperforms traditional clustering algorithms such as the k-means algorithm</li>
+						</ol>
+						<p><small>Luxburg (2007). <a href="http://www.stoimen.com/blog/2012/08/31/computer-algorithms-graphs-and-their-representation/">A Tutorial on Spectral Clustering</a></small></p>
+					</section>
+					<section>
+						<h2>Spectral Clustering: Steps</h2>
+						<ol>
+							<li class="fragment">Compute the similarity matrix, <b>S</b> <span class="fragment" style="color:#e7ad52">(e.g. Kernel function)</span></li>
+							<li class="fragment">Calculate the affinity matrix, <b>A</b>, from <b>S</b> <span class="fragment" style="color:#e7ad52">(e.g. k-nearest neighbors algorithm)</span></li>
+							<li class="fragment">Calculate a graph Laplacian, <b>L</b></li>
+							<li class="fragment">Perform k-means clustering on matrix, <b>Z</b>, consisting of eigenvectors for k smallest eigenvalues, ignoring the smallest (constant) eigenvector of <b>L</b></li>
+						</ol>
+					</section>
+					<section>
+						<h2>Data &#8680; Transform and Embed</h2>
+						<img height=400 data-src="resources/spirals.png">
+					</section>
+					<section>
+						<p> 1. Compute the similarity matrix, <b>S</b> <span style="color:#e7ad52">(e.g. Kernel function like RBF)</span></p>
+						<img height = 500 data-src="resources/similarity.png">
+					</section>
+					<section>
+						<p> 2. Calculate the affinity matrix, <b>A</b>, from <b>S</b> <span style="color:#e7ad52">(e.g. k-nearest neighbors algorithm)</span></p>
+						<img height = 500 data-src="resources/affinity_graph.png">
+					</section>
+					<section id="laplacian">
+						<p> 3. Calculate a graph Laplacian, <b>L</b></p>
+						<p>$L = D − W$</p>
+						<img data-src="resources/laplacian.png">
+						<p><small>Wikipedia: <a href="https://en.wikipedia.org/wiki/Laplacian_matrix">Laplacian matrix</a></small></p>
+					</section>
+					<section id="laplacian">
+						<p> 4. Perform k-means clustering on matrix, <b>Z</b>, consisting of eigenvectors for k smallest eigenvalues of <b>L</b></p>
+						<img data-src="resources/spectclust_2-01.png">
+					</section>
+					<section>
+						<h2>Aside: <span style="color:#e7ad52">Can also be formulated as Mincut</span></h2>
+						<img height=400 data-src="resources/Graph_comparison.jpg">
+						<p><small><a href="https://en.wikipedia.org/wiki/Graph_partition">Graph Partition</a></small></p>
+					</section>
+					<section>
+						<h2>Mincut</h2>
+						<img height=400 data-src="resources/Connected_graph.jpg">
+						<p>Eigen value decomposition &#8680; <span style="color:red">Fiedler vector</span></p>
+						<p><small><a href="https://en.wikipedia.org/wiki/Graph_partition">Graph Partition</a></small></p>
+					</section>
+					<section>
+						<h2>Overview for $k>2$</h2>
+						<img height=500 data-src="resources/spectclust.png">
+						<p><small><a href="http://scimes.readthedocs.org/en/latest/algorithm.html">astropy</a></small></p>
+					</section>
 				</section>
 				<!--..................-->
 				<!--LINK COMMUNITY-->
 				<!--..................-->
-				<section id="linkcomm">
-					<h2>Link-community clustering</h2>
-					<img height=500 data-src="resources/linkcomm.png">
-					<p><small>Yong-Yeol et al (2010). <a href="http://www.nature.com/nature/journal/v466/n7307/full/nature09182.html">Link communities reveal multiscale complexity in networks</a></small></p>
-				</section>
-				<section id="linkcomm">
-					<h2>Link-community clustering</h2>
-					<img height=500 data-src="resources/linkcomm_score.png">
-					<p><small>Yong-Yeol et al (2010). <a href="http://www.nature.com/nature/journal/v466/n7307/full/nature09182.html">Link communities reveal multiscale complexity in networks</a></small></p>
-				</section>
-				<section id="linkcomm">
-					<h2>Link-community clustering</h2>
-					<img height=500 data-src="resources/linkcomm_hclust.png">
-					<p><small>Yong-Yeol et al (2010). <a href="http://www.nature.com/nature/journal/v466/n7307/full/nature09182.html">Link communities reveal multiscale complexity in networks</a></small></p>
-				</section>
 				<section>
+					<section id="linkcomm">
+						<h2>Link-community clustering</h2>
+						<img height=500 data-src="resources/linkcomm.png">
+						<p><small>Yong-Yeol et al (2010). <a href="http://www.nature.com/nature/journal/v466/n7307/full/nature09182.html">Link communities reveal multiscale complexity in networks</a></small></p>
+					</section>
+					<section id="uga">
+						<h2>Weighted Undirected Graph</h2>
+						<img height=500 data-src="resources/uga.png">
+						<p><small><a href="http://www.stoimen.com/blog/2012/08/31/computer-algorithms-graphs-and-their-representation/">stoimen.com</a></small></p>
+					</section>
+					<section >
+						<h2>Link-community clustering</h2>
+						<img height=500 data-src="resources/linkcommscore.png">
+						<p><small>Yong-Yeol et al (2010). <a href="http://www.nature.com/nature/journal/v466/n7307/full/nature09182.html">Link communities reveal multiscale complexity in networks</a></small></p>
+					</section>
+					<section >
+						<h2>Link-community clustering</h2>
+						<img height=500 data-src="resources/linkcomm_hclust.png">
+						<p><small>Yong-Yeol et al (2010). <a href="http://www.nature.com/nature/journal/v466/n7307/full/nature09182.html">Link communities reveal multiscale complexity in networks</a></small></p>
+					</section>
 					<section id="examples">
 						<h2>Examples</h2>
 					</section>
-					<section id="flavornetwork">
+					<section >
 						<h2>Flavor Network</h2>
 						<img height=500 data-src="resources/flavornetwork.jpg">
 						<p><small>Yong-Yeol et al (2011). <a href="http://www.nature.com/articles/srep00196">Flavor network and the principles of food pairing</a></small></p>
 					</section>
-					<section id="flavornetwork">
+					<section >
 						<h2>EGRIN2.0</h2>
 						<h4>Gene co-regulation network</h4>
 						<img height=400 data-src="resources/network-01.png">
 						<p><small>Brooks and Reiss et al (2014). <a href="http://msb.embopress.org/cgi/pmidlookup?view=long&pmid=25028489">A system‐level model for the microbial regulatory genome</a></small></p>
 					</section>
-					<section id="flavornetwork">
+					<section >
 						<h3>Conditionally Co-regulated Modules (Corems)</h3>
 						<img height=450 data-src="resources/corem.png">
 						<p><small>Brooks and Reiss et al (2014). <a href="http://msb.embopress.org/cgi/pmidlookup?view=long&pmid=25028489">A system‐level model for the microbial regulatory genome</a></small></p>
@@ -143,22 +247,29 @@
 				<!--LAB INTRO-->
 				<!--..................-->
 				<section>
+					<section>
+						<h4>Similarities between 4567 human genes</h4>
+						<img height=500 data-src="resources/component_graphs.png">
+						<p><small>Selected from their relationship to 120 genes involved in mitosis, DNA mismatch repair, and BMP signaling</small></p>
+					</section>
 					<section id="karimnetwork">
-						<h2>Kernel Network</h2>
+						<h2>Combined Kernel Network</h2>
 						<img height=500 data-src="resources/labgraph.png">
 						<p><small>For more info: <a href="http://scalefreegan.github.io/Teaching/DataIntegration/practicals/p1.html">Practical 1</a></small></p>
 					</section>
 					<section>
 						<h2>How to detect community structure?</h2>
+						<ol>
+							<li class="fragment"><span style="color:#e7ad52">Node</span>-based <span style="color:#e7ad52">spectral</span> clustering</li>
+							<li class="fragment"><span style="color:#e7ad52">Edge</span>-based <span style="color:#e7ad52">link-community</span> clustering</li>
+						</ol>
 					</section>
 				</section>
 
 				<section>
-					<h1>Questions?</h1>
+					<h2>Please continue to <a href="../practicals/p2.html">Practical #2</a>
 				</section>
-
 			</div>
-
 		</div>
 
 		<script src="reveal/lib/js/head.min.js"></script>
