@@ -140,7 +140,7 @@ evL <- eigen(U, symmetric=TRUE)
 </div>
 
 >
-> Plot the eigenvalue spectrum on the `spirals` dataset for the *4 lowest* eigenvalues
+> Plot the eigenvalue spectrum on the `spirals` dataset for the *10 lowest* eigenvalues. Use log-scale for y-axis. You will need to add small value (1e-12) to the eigenvalues.
 >
 > Is there a gap? Based on this analysis how many clusters would you choose?
 >
@@ -150,15 +150,11 @@ evL <- eigen(U, symmetric=TRUE)
 <div id='hint'>
 <h5 class="ui-closed" style="color:blue">Solution</h5>
 
-  ```{r fig.align = "center", fig.height = 4, fig.width = 6.5, echo = FALSE}
-    plot(rev(evL$values)[1:4], pch=8, cex = 1.25, main = "Spirals eigenvalue spectrum: 4 lowest", xlab = "Index", ylab = "Value")
+  ```{r fig.align = "center", fig.height = 4, fig.width = 6.5, echo=F}
+    plot(seq(1:10), rev(evL$values)[1:10]+1e-12, pch=8, cex = 1.25, main = "Spirals eigenvalue spectrum: 10 lowest", xlab = "Index", ylab = "Value", log="y")
   ```
-  <p>In this plot we clearly see at the expected number of clusters from our previous analysis. Plotting only the lowest 4 values, however, hides a secret.</p>
+  <p>In this plot we clearly see at the expected number of clusters from our previous analysis.</p>
 
-  ```{r fig.align = "center", fig.height = 4, fig.width = 6.5, echo = FALSE}
-    plot(rev(evL$values)[1:10], pch=8, cex = 1.25, main = "Spirals eigenvalue spectrum: 10 lowest", xlab = "Index", ylab = "Value")
-  ```
-  <p>Here we see similar gaps occur at regular intervals (every other eigenvalue). Why is this?</p>
 </div>
 
 ## Modularity maximization
