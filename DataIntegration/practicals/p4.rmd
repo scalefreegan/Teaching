@@ -193,7 +193,7 @@ PI       | `r sum(!is.na(data[,"PI"]))/sum(!is.na(data[,mnames]))`         | `r 
 TM       | `r sum(!is.na(data[,"TM"]))/sum(!is.na(data[,mnames]))`         | `r sum(!is.na(towrite[,"TM"]))/sum(!is.na(towrite[,mnames]))`
 </div>
 
-## Export network
+## Import network
 
 The network is now ready to import into Cytoscape.
 
