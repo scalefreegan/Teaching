@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Introduction to clustering</title>
+
+		<meta name="description" content="Data mining and integration with networks: Introduction to clustering">
+		<meta name="author" content="Aaron Brooks">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="reveal/css/reveal.css">
+		<link rel="stylesheet" href="reveal/css/theme/night.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="reveal/lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'reveal/css/print/pdf.css' : 'reveal/css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h2>Cluster detection, analysis and <span class="fragment highlight-red">visualization</span></h2>
+					<p>
+						<small>Author: <a href="http://aaronbrooks.info">Aaron Brooks</a> / <a href="http://twitter.com/scalefreegan">@scalefreegan</a></small>
+					</p>
+					<br>
+					<p>
+						<small>You can follow along on  <img height=40 align="middle" style="background:0px;margin:0px 5px 5px 5px;border:0;box-shadow:0;vertical-align:middle" data-src="resources/GitHub-Mark/PNG/GitHub-Mark-Light-64px.png"></small>
+						<br>
+						<small><a href="http://scalefreegan.github.io/Teaching/DataIntegration">http://scalefreegan.github.io/Teaching/DataIntegration</a></small>
+					</p>
+				</section>
+
+				<section id="goals">
+					<h2>Goals: Cluster Visualization</h2>
+					<ul>
+						<span class="fragment"><li>Basic visualizations: Heatmap, Cluster dendrogram</li></span>
+						<span class="fragment"><li>Advanced visualization: Network-based visualization, Cytoscape</li></span>
+						<span class="fragment"><li>Biological recap. Why are we doing this?</li></span>
+ 						<span class="fragment"><li>Extensions</li></span>
+					</ul>
+				</section>
+				<section>
+					<h3><span class="fragment">We've clustered the data...</span><br><span class="fragment">&nbsp;&nbsp;We've choosen <b>k</b>...</span><br><span class="fragment" style="color:#e7ad52">&nbsp;&nbsp;&nbsp;&nbsp;Now what?</span></h3>
+				</section>
+				<section>
+					<section>
+						<h2>Visualization</h2>
+						<p class="fragment" style="color:#e7ad52">There are many things one could do with these networks</p>
+						<p class="fragment">Some functions available in <code>linkcomm</code> package</p>
+					</section>
+					<section>
+						<h3>Cluster dendrogram</h3>
+						<img height=400 data-src="resources/linkcomm_clust_c.png">
+						<p><small><code>plot(network, type = "summary")</code></small></p>
+						<p><small><a href="https://cran.r-project.org/web/packages/linkcomm/vignettes/linkcomm.pdf">Linkcomm vignette</a></small></p>
+					</section>
+					<section>
+						<h3>Relationships between communities</h3>
+						<img height=400 data-src="resources/lc4.png">
+						<small><p><code> cr = getClusterRelatedness(network, hcmethod = "ward")</code></p>
+						<p><code> cutDendrogramAt(cr, cutat = 1.2)</code></p></small>
+						<p><small><a href="https://cran.r-project.org/web/packages/linkcomm/vignettes/linkcomm.pdf">Linkcomm vignette</a></small></p>
+					</section>
+					<section>
+						<h3>Community membership</h3>
+						<img height=400 data-src="resources/lc3.png">
+						<p><small><code>plot(network, type = "members")</code></small></p>
+						<p><small><a href="https://cran.r-project.org/web/packages/linkcomm/vignettes/linkcomm.pdf">Linkcomm vignette</a></small></p>
+					</section>
+					<section>
+						<h3>Plot</h3>
+						<img height=400 data-src="resources/lc1.png">
+						<small><p><code>plot(network, type = "graph", layout = layout.fruchterman.reingold)</code></p>
+						<p><code>plot(lc, type = "graph", layout = "spencer.circle")</code></p></small>
+						<p><small><a href="https://cran.r-project.org/web/packages/linkcomm/vignettes/linkcomm.pdf">Linkcomm vignette</a></small></p>
+					</section>
+					<section>
+						<h2>Plot</h2>
+						<img height=400 data-src="resources/lc2.png">
+						<p><small><code>plot(network, type = "graph", shownodesin = 2, node.pies = TRUE)</code></small></p>
+						<p><small><a href="https://cran.r-project.org/web/packages/linkcomm/vignettes/linkcomm.pdf">Linkcomm vignette</a></small></p>
+					</section>
+				</section>
+				<section>
+					<section data-background="resources/why.gif">
+					</section>
+					<section>
+						<h2>Why cluster a network?</h2>
+						<p><span style="color:#e7ad52" class="fragment">Clustering is a way to decipher network structure</span></p>
+						<p><span class="fragment">Hairball &#8680; Comprehension</span></p>
+					</section>
+					<section>
+						<h3>Lesson from experience: <span style="color:#e7ad52">EGRIN 2.0</span></h3>
+						<img height=500 data-src="resources/network-01.png">
+						<p><small>Brooks and Reiss et al (2014). <a href="http://msb.embopress.org/cgi/pmidlookup?view=long&pmid=25028489">A system‐level model for the microbial regulatory genome</a></small></p>
+					</section>
+					<section >
+						<h4>Conditionally Co-regulated Modules (Corems)</h4>
+						<img height=550 data-src="resources/corem.png">
+						<p><small>Brooks and Reiss et al (2014). <a href="http://msb.embopress.org/cgi/pmidlookup?view=long&pmid=25028489">A system‐level model for the microbial regulatory genome</a></small></p>
+					</section>
+					<section >
+						<h4><span style="color:#e7ad52">Biology:</span> Dipeptide transporter regulation in <i>Haloarchaea</i></h4>
+						<img height=500 data-src="resources/F3.large.jpg">
+						<p><small>Brooks and Reiss et al (2014). <a href="http://msb.embopress.org/cgi/pmidlookup?view=long&pmid=25028489">A system‐level model for the microbial regulatory genome</a></small></p>
+					</section>
+					<section>
+						<h2>Clustering for <span style="color:#e7ad52">Data Integration</span></h2>
+					</section>
+					<section>
+						<h4>Graph kernels derived from 5 sources of information</h4>
+						<img width=100% data-src="resources/datatable.png">
+					</section>
+					<section>
+						<h4>Similarities between 4567 human genes</h4>
+						<img height=500 data-src="resources/component_graphs.png">
+						<p><small>Selected from their relationship to 120 genes involved in mitosis, DNA mismatch repair, and BMP signaling</small></p>
+					</section>
+					<section>
+						<h2>Course goals</h2>
+						<ol>
+							<span class="fragment"><li><span style="color:#e7ad52">Combine </span>graph kernels</li></span>
+							<span class="fragment"><li><span style="color:#e7ad52">Cluster </span>integrated network</li></span>
+						</ol>
+					</section>
+					<section>
+						<h2>Combined Kernel Network</h2>
+						<img height=500 data-src="resources/labgraph.png">
+						<p><small>For more info: <a href="http://scalefreegan.github.io/Teaching/DataIntegration/practicals/p1.html">Practical 1</a></small></p>
+					</section>
+					<section>
+						<h2>Link Community Network</h2>
+						<img height=500 data-src="resources/linkcomm_graphviz.png">
+						<p><small>For more info: <a href="http://scalefreegan.github.io/Teaching/DataIntegration/practicals/p2.html">Practical 2</a></small></p>
+					</section>
+					<section>
+						<h2>Let's take a deeper look at this network in <a href="https://github.com/scalefreegan/Teaching/blob/master/DataIntegration/data/graph.cys?raw=true">Cytoscape</a></h2>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Extensions</h2>
+					</section>
+					<section>
+						<h4>Heterogeneous Network Edge Prediction: A Data Integration Approach to Prioritize Disease-Associated Genes</h4>
+						<img height = 500 data-src="resources/hnep.PNG">
+						<p><small><a href="http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004259">Himmelstein and Baranzini (2015)</a></small></p>
+					</section>
+					<section>
+						<iframe src="https://player.vimeo.com/video/9726202" width="900" height="681" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+					</section>
+					<section data-background="resources/massive.png">
+					</section>
+				</section>
+				<section>
+					<h2>Please continue to <a href="../practicals/p4.html">Practical #4</a>
+				</section>
+				<section data-background="resources/end.gif">
+				</section>
+			</div>
+		</div>
+
+		<script src="reveal/lib/js/head.min.js"></script>
+		<script src="reveal/js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'reveal/plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'reveal/plugin/zoom-js/zoom.js', async: true },
+					{ src: 'reveal/plugin/notes/notes.js', async: true },
+					{ src: 'reveal/plugin/math/math.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
