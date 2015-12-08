@@ -46,15 +46,15 @@ load(url(paste(GITHUBDIR, "kernel.rda", sep = ""), method = "libcurl"))
 
 We will start with the most simple method for estimating the number of clusters in our data, the elbow method. It should be noted from the outset that *this method rarely works*, except for relatively simple datasets. It should also be noted that there are many joint-like appendage methods (i.e. elbows and knees) based on different quantifications of the change in the "goodness" of the clustering at different values of **k**. Nevertheless it's worthwhile to see how it works to develop an intuition for how one might select the number of clusters.
 
-The elbow method tries to find a sweet spot where the amount of variance explained by adding an additional cluster doesn't increase significantly. As the name suggests, this is "detected" by observing a change in the slope between points in a graph of the percent variance explained vs number of clusters.
-
-The percent variance explained can be calculated by the ratio of the between-group variance (sum of squares) to the total variance or:
+The elbow method tries to find a sweet spot where the amount of variance explained by adding an additional cluster doesn't increase significantly. As the name suggests, this is "detected" by observing a change in the slope between points in a graph of the within cluster sum of quares vs number of clusters.
 
 $$ D_k = \sum_{x_i \in C_k} \sum_{x_j \in C_k} ||x_i-x_j||^2 = 2n_k \sum_{x_i \in C_k} ||x_i-\mu_k||^2  $$
 
 $$ W_k = \sum_{k = 1}^{k} \frac{1}{2n_k} D_k$$
 
 $n_k$ is the number of clusters. $\mu_k$ is the mean of each cluster.
+
+Alternatively, the elbow method can be applied to the percent variance explained by calculating the ratio of between-group variance (sum of squares) to the total variance.
 
 >
 > Plot the ratio of between-group variance explained to the total variance versus **k** for 2 to 10 clusters in the `iris` dataset for the features `Sepal.Length` and `Sepal.Width`
@@ -236,7 +236,7 @@ A visual representation of the approach is included in the `linkcomm` [vignette]
 
 The results for our network look like this:
 
-<p style="text-align:center;"><img src="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/resources/linkcomm.png" width="400px" /></p>
+<p style="text-align:center;"><img src="http://scalefreegan.github.io/Teaching/DataIntegration/lectures/resources/linkcomm_density.png" width="400px" /></p>
 
 # Summary
 

@@ -54,19 +54,88 @@
 				</section>
 
 				<section id="goals">
-					<h2>Goals (20 min - 10 slides)</h2>
+					<h2>Goals: Cluster Analysis</h2>
 					<ul>
-						<li>What is clustering/community detection? Why cluster? Relationship to graph/network structure? Role in data integration.</li>
-						<li class="fragment"> Simple biological and non-biological examples (motivation, e.g. karate club, regulatory "modules")</li>
-						<li class="fragment"> Approaches to clustering: Node vs edge clustering, Hard vs soft clustering</li>
-						<li class="fragment"> Overview of topics covered / Lab data set</li>
+						<span class="fragment"><li>How to evaluate cluster quality</li></span>
+						<span class="fragment"><li>Cluster quality metrics</li></span>
 					</ul>
 				</section>
 				<section>
-					<iframe width="600" height="600" src="//www.thinglink.com/card/652228971148083201" type="text/html" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen scrolling="no"></iframe>
+					<h2>How to choose <span style="color:#e7ad52"><b>k</b></span>?</h2>
+				</section>
+				<section>
+					<section>
+						<h2>Na&#239;ve approaches</h2>
+					</section>
+					<section>
+						<h3>Intuition, <span class="fragment">Prior Knowledge</span><span class="fragment"> or Expectation</span></h3>
+						<p class="fragment" style="color:#e7ad52">How many clusters are there?
+						<img height=400 src="resources/small_network-01.png"></p>
+						<p class="fragment">This approach is common in practice but not recommended!</p>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h3><span style="color:#e7ad52">Data-driven</span> approaches</h3>
+						<ul>
+							<span class="fragment"><li>Elbow method</li></span>
+							<span class="fragment"><li>Spectral gap</li></span>
+							<span class="fragment"><li>Modularity maximization</li></span>
+						</ul>
+					</section>
+					<section>
+						<h2>Elbow method</h2>
+						<p> Intuition: <span class="fragment" style="color:#e7ad52">find <b>k</b> where an additional cluster doesn't significantly add to the amount of variance explained</span></p>
+						<p class="fragment">
+							$$ D_k = \sum_{x_i \in C_k} \sum_{x_j \in C_k} ||x_i-x_j||^2 = 2n_k \sum_{x_i \in C_k} ||x_i-\mu_k||^2  $$
+							$$ W_k = \sum_{k = 1}^{k} \frac{1}{2n_k} D_k$$
+							$n_k$ is the number of clusters. $\mu_k$ is the mean of each cluster.
+						</p>
+					</section>
+					<section>
+						<h2>Elbow method</h2>
+						<img height=500 src="resources/elbow.png"></p>
+						<p><small><a href="https://www.quora.com/How-can-we-choose-a-good-K-for-K-means-clustering">Daniel Martinelbow</a></small></p>
+					</section>
+					<section>
+						<h2>Spectral Gap</h2>
+						<img height=500 src="resources/spectclust.png">
+						<p style="color:#e7ad52">Relevant for Spectral Clustering</p>
+					</section>
+					<section>
+						<h2>Spectral Gap</h2>
+						<p>If $L$ is approximately block-diagonal, then the eigenvalue spectrum of $L$ will have a gap at the optimal <b>k</b></p>
+						<img height=400 src="resources/gap.png"></p>
+						<p><small><a href="https://charlesmartin14.wordpress.com/2012/10/09/spectral-clustering/">Charles Martin</a></small></p>
+					</section>
+					<section>
+						<h2>Modularity Maximization</h2>
+						<img height=500 src="resources/q.png">
+						<p><small><a href="https://sites.google.com/site/prathasah/codes/modular-random-graph-generator">Pratha Sah</a></small></p>
+					</section>
+					<section>
+						<h2>Modularity Maximization</h2>
+						<p> Intuition: <span class="fragment" style="color:#e7ad52">maximize within-cluster edges and minimize between-cluster edges</span></p>
+						<p class="fragment"> $$ Q = \frac{1}{2m} \sum_{ij} A_{ij} - \frac{k_i k_j}{2m} \delta(i, j) $$
+							$$ \delta(i, j) = \begin{cases} 1 & \text{if i = j} \\ 0 & \text{otherwise} \end{cases} $$
+						</p>
+					</section>
+					<section>
+						<h2>Modularity Maximization</h2>
+						<img height=500 src="resources/linkcomm_clust_c.png">
+						<p style="color:#e7ad52">Used in Link-community clustering</p>
+					</section>
+				</section>
+				<section>
+					<h2>Choosing <span style="color:#e7ad52"><b>k</b></span> is tricky</h2>
+					<p class="fragment">The "best" cutoff often will be elusive</p>
+				</section>
+				<section data-background="resources/difficult.gif">
+				</section>
+				<section>
+					<h2>Please continue to <a href="../practicals/p3.html">Practical #3</a>
 				</section>
 			</div>
-
 		</div>
 
 		<script src="reveal/lib/js/head.min.js"></script>
@@ -91,7 +160,8 @@
 					{ src: 'reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
 					{ src: 'reveal/plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
 					{ src: 'reveal/plugin/zoom-js/zoom.js', async: true },
-					{ src: 'reveal/plugin/notes/notes.js', async: true }
+					{ src: 'reveal/plugin/notes/notes.js', async: true },
+					{ src: 'reveal/plugin/math/math.js', async: true }
 				]
 			});
 
