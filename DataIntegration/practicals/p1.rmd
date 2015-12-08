@@ -29,7 +29,7 @@ This document will introduce basic concepts related to clustering and provide a 
 
 First, a word about the format of these practicals.
 
-The practicals are designed to allow self-guided exploration of the course materials. Each practical is paired with information from the preceding lecture. You should be able to explore this document at your own pace and even refer to it again in the future.
+The practicals are designed to allow self-guided exploration of the course materials. Each practical is paired with information from the preceding lecture. You will be able to explore this document at your own pace and refer to it again in the future.
 
 In addition to the text, be on the lookout for three special formats in these documents. These sections include scripts, exercises and solutions, respectively.   
 

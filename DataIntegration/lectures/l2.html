@@ -128,16 +128,19 @@
 				<!--..................-->
 				<section id="spectral">
 					<section>
+						<h2>Clustering <span style="color:#e7ad52">Nodes</span></h2>
+					</section>
+					<section>
 						<h2>Advanced Clustering</h2>
 						<img height=400 data-src="resources/spirals.png">
 						<p style="color:#e7ad52">What if your data looks like this?</p>
 					</section>
 					<section>
-						<h2>k-means</h2>
+						<h3>K-means Solution</h3>
 						<img height=400 data-src="resources/spirals1.png">
 					</section>
 					<section>
-						<h2>Spectral Clustering</h2>
+						<h3>Spectral Clustering Solution</h3>
 						<img height=400 data-src="resources/spirals2.png">
 					</section>
 					<section data-background="resources/cow.gif">
@@ -170,7 +173,7 @@
 					</section>
 					<section>
 						<p> 2. Calculate the affinity matrix, <b>A</b>, from <b>S</b> <span style="color:#e7ad52">(e.g. k-nearest neighbors algorithm)</span></p>
-						<img height = 500 data-src="resources/affinity_graph.png">
+						<img height = 500 data-src="resources/affinity_graph-01.png">
 					</section>
 					<section id="laplacian">
 						<p> 3. Calculate a graph Laplacian, <b>L</b></p>
@@ -178,17 +181,17 @@
 						<img data-src="resources/laplacian.png">
 						<p><small>Wikipedia: <a href="https://en.wikipedia.org/wiki/Laplacian_matrix">Laplacian matrix</a></small></p>
 					</section>
-					<section id="laplacian">
+					<section>
 						<p> 4. Perform k-means clustering on matrix, <b>Z</b>, consisting of eigenvectors for k smallest eigenvalues of <b>L</b></p>
 						<img data-src="resources/spectclust_2-01.png">
 					</section>
 					<section>
-						<h2>Aside: <span style="color:#e7ad52">Can also be formulated as Mincut</span></h2>
+						<h3>Aside: <span style="color:#e7ad52">Can also be formulated as Mincut</span></h3>
 						<img height=400 data-src="resources/Graph_comparison.jpg">
 						<p><small><a href="https://en.wikipedia.org/wiki/Graph_partition">Graph Partition</a></small></p>
 					</section>
 					<section>
-						<h2>Mincut</h2>
+						<h3>Mincut</h3>
 						<img height=400 data-src="resources/Connected_graph.jpg">
 						<p>Eigen value decomposition &#8680; <span style="color:red">Fiedler vector</span></p>
 						<p><small><a href="https://en.wikipedia.org/wiki/Graph_partition">Graph Partition</a></small></p>
@@ -203,24 +206,55 @@
 				<!--LINK COMMUNITY-->
 				<!--..................-->
 				<section>
+					<section>
+						<h2>Clustering <span style="color:#e7ad52">Edges</span></h2>
+					</section>
 					<section id="linkcomm">
 						<h2>Link-community clustering</h2>
-						<img height=500 data-src="resources/linkcomm.png">
+						<img height=500 data-src="resources/nature09182-f1.2_1-01.jpg">
 						<p><small>Yong-Yeol et al (2010). <a href="http://www.nature.com/nature/journal/v466/n7307/full/nature09182.html">Link communities reveal multiscale complexity in networks</a></small></p>
 					</section>
-					<section id="uga">
-						<h2>Weighted Undirected Graph</h2>
-						<img height=500 data-src="resources/uga.png">
-						<p><small><a href="http://www.stoimen.com/blog/2012/08/31/computer-algorithms-graphs-and-their-representation/">stoimen.com</a></small></p>
+					<section>
+						<h3>Cluster edges rather than nodes</h3>
+						<img height=400 data-src="resources/nature09182-f1.2_2-01.jpg">
+						<p><small>Yong-Yeol et al (2010). <a href="http://www.nature.com/nature/journal/v466/n7307/full/nature09182.html">Link communities reveal multiscale complexity in networks</a></small></p>
 					</section>
-					<section >
-						<h2>Link-community clustering</h2>
-						<img height=500 data-src="resources/linkcommscore.png">
+					<section>
+						<h2>Link-community clustering: Steps</h2>
+						<ol>
+							<li class="fragment">Compute similarity score between every pair of edges</li>
+							<li class="fragment">Perform agglomerative clustering on edge similarities</li>
+							<li class="fragment">Cut dendrogram at height that maximizes cluster density</li>
+						</ol>
+					</section>
+					<section>
+						<h3>1. Compute similarity score between every pair of edges</h3>
+						<img height=400 data-src="resources/linkcommscore.png">
 						<p><small>Yong-Yeol et al (2010). <a href="http://www.nature.com/nature/journal/v466/n7307/full/nature09182.html">Link communities reveal multiscale complexity in networks</a></small></p>
 					</section>
 					<section >
-						<h2>Link-community clustering</h2>
-						<img height=500 data-src="resources/linkcomm_hclust.png">
+						<h3>2. Perform agglomerative clustering on edge similarities</h3>
+						<img height=500 data-src="resources/linkcomm_clust_c.png">
+						<p><small>Yong-Yeol et al (2010). <a href="http://www.nature.com/nature/journal/v466/n7307/full/nature09182.html">Link communities reveal multiscale complexity in networks</a></small></p>
+					</section>
+					<section >
+						<h3>3. Cut dendrogram at height that maximizes cluster density</h3>
+						<img height=500 data-src="resources/linkcomm_clust_c.png">
+						<p><small>Yong-Yeol et al (2010). <a href="http://www.nature.com/nature/journal/v466/n7307/full/nature09182.html">Link communities reveal multiscale complexity in networks</a></small></p>
+					</section>
+					<section >
+						<h3>Resulting link communities are multiscale...</h3>
+						<img height=400 data-src="resources/nature09182-f4.2_2-01.jpg">
+						<p><small>Yong-Yeol et al (2010). <a href="http://www.nature.com/nature/journal/v466/n7307/full/nature09182.html">Link communities reveal multiscale complexity in networks</a></small></p>
+					</section>
+					<section >
+						<h3>Resulting link communities are multiscale...</h3>
+						<img height=400 data-src="resources/nature09182-f4.2_3-01.jpg">
+						<p><small>Yong-Yeol et al (2010). <a href="http://www.nature.com/nature/journal/v466/n7307/full/nature09182.html">Link communities reveal multiscale complexity in networks</a></small></p>
+					</section>
+					<section >
+						<h3>...and overlapping</h3>
+						<img height=500 data-src="resources/nature09182-f1.2_3-01.jpg">
 						<p><small>Yong-Yeol et al (2010). <a href="http://www.nature.com/nature/journal/v466/n7307/full/nature09182.html">Link communities reveal multiscale complexity in networks</a></small></p>
 					</section>
 					<section id="examples">
@@ -247,6 +281,9 @@
 				<!--LAB INTRO-->
 				<!--..................-->
 				<section>
+					<section>
+						<h2>Clustering for <span style="color:#e7ad52">Data Integration</span></h2>
+					</section>
 					<section>
 						<h4>Similarities between 4567 human genes</h4>
 						<img height=500 data-src="resources/component_graphs.png">
