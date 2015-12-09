@@ -4,7 +4,7 @@
  *
  * Licensed under the MIT license.
  * http://www.opensource.org/licenses/mit-license.php
- * 
+ *
  * Copyright 2015, Codrops
  * http://www.codrops.com
  */
@@ -53,17 +53,15 @@
 		// isotope instance
 		iso,
 		// filter ctrls
-		filterCtrls = [].slice.call(document.querySelectorAll('.filter > button')),
-		// cart
-		cart = document.querySelector('.cart'),
-		cartItems = cart.querySelector('.cart__count');
+		filterCtrls = [].slice.call(document.querySelectorAll('.filter > button'));
+
 
 	function init() {
 		// preload images
 		imagesLoaded(grid, function() {
 			initFlickity();
 			initIsotope();
-			initEvents();
+			//initEvents();
 			classie.remove(grid, 'grid--loading');
 		});
 	}
@@ -96,38 +94,38 @@
 		});
 	}
 
-	function initEvents() {
-		filterCtrls.forEach(function(filterCtrl) {
-			filterCtrl.addEventListener('click', function() {
-				classie.remove(filterCtrl.parentNode.querySelector('.filter__item--selected'), 'filter__item--selected');
-				classie.add(filterCtrl, 'filter__item--selected');
-				iso.arrange({
-					filter: filterCtrl.getAttribute('data-filter')
-				});
-				recalcFlickities();
-				iso.layout();
-			});
-		});
-
-		// window resize / recalculate sizes for both flickity and isotope/masonry layouts
-		window.addEventListener('resize', throttle(function(ev) {
-			recalcFlickities()
-			iso.layout();
-		}, 50));
-
-		// add to cart
-		[].slice.call(grid.querySelectorAll('.grid__item')).forEach(function(item) {
-			item.querySelector('.action--buy').addEventListener('click', addToCart);
-		});
-	}
-
-	function addToCart() {
-		classie.add(cart, 'cart--animate');
-		setTimeout(function() {cartItems.innerHTML = Number(cartItems.innerHTML) + 1;}, 200);
-		onEndAnimation(cartItems, function() {
-			classie.remove(cart, 'cart--animate');
-		});
-	}
+	// function initEvents() {
+	// 	filterCtrls.forEach(function(filterCtrl) {
+	// 		filterCtrl.addEventListener('click', function() {
+	// 			classie.remove(filterCtrl.parentNode.querySelector('.filter__item--selected'), 'filter__item--selected');
+	// 			classie.add(filterCtrl, 'filter__item--selected');
+	// 			iso.arrange({
+	// 				filter: filterCtrl.getAttribute('data-filter')
+	// 			});
+	// 			recalcFlickities();
+	// 			iso.layout();
+	// 		});
+	// 	});
+	//
+	// 	// window resize / recalculate sizes for both flickity and isotope/masonry layouts
+	// 	window.addEventListener('resize', throttle(function(ev) {
+	// 		recalcFlickities()
+	// 		iso.layout();
+	// 	}, 50));
+	//
+	// 	// add to cart
+	// 	[].slice.call(grid.querySelectorAll('.grid__item')).forEach(function(item) {
+	// 		item.querySelector('.action--buy').addEventListener('click', addToCart);
+	// 	});
+	// }
+	//
+	// function addToCart() {
+	// 	classie.add(cart, 'cart--animate');
+	// 	setTimeout(function() {cartItems.innerHTML = Number(cartItems.innerHTML) + 1;}, 200);
+	// 	onEndAnimation(cartItems, function() {
+	// 		classie.remove(cart, 'cart--animate');
+	// 	});
+	// }
 
 	function recalcFlickities() {
 		for(var i = 0, len = flkties.length; i < len; ++i) {
