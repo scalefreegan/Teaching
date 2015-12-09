@@ -79,7 +79,7 @@
 /* Flickity page dots */
 
 .slider .flickity-page-dots {
-	bottom: 20px;
+	bottom: 15px;
 	opacity: 0;
 	-webkit-transition: opacity .3s;
 	transition: opacity .3s;
@@ -90,7 +90,7 @@
 }
 
 .slider .flickity-page-dots .dot {
-	background: #131417;
+	background: #ffffff;
 }
 
 /* Product meta */
