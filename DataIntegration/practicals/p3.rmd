@@ -68,7 +68,7 @@ Alternatively, the elbow method can be applied to the percent variance explained
 <div id='hint'>
 <h5 class="ui-closed" style="color:blue">Solution</h5>
 <div id='hint'>
-```{r fig.align = "center", fig.height = 4, fig.width = 6.5, echo = FALSE}
+```{r fig.align = "center", fig.height = 4, fig.width = 6.5, echo = TRUE}
 
 Wk = unlist(lapply(seq(2,10),function(i){
   km = kmeans(cbind(iris$Sepal.Length, iris$Sepal.Width), centers = i)
@@ -150,10 +150,11 @@ evL <- eigen(U, symmetric=TRUE)
 <div id='hint'>
 <h5 class="ui-closed" style="color:blue">Solution</h5>
 
-  ```{r fig.align = "center", fig.height = 4, fig.width = 6.5, echo=F}
-    plot(seq(1:10), rev(evL$values)[1:10]+1e-12, pch=8, cex = 1.25, main = "Spirals eigenvalue spectrum: 10 lowest", xlab = "Index", ylab = "Value", log="y")
-  ```
-  <p>In this plot we clearly see at the expected number of clusters from our previous analysis.</p>
+```{r fig.align = "center", fig.height = 4, fig.width = 6.5, echo=TRUE}
+plot(seq(1:10), rev(evL$values)[1:10]+1e-12, pch=8, cex = 1.25, main = "Spirals eigenvalue spectrum: 10 lowest", xlab = "Index", ylab = "Value", log="y")
+```
+
+<p>In this plot we clearly see at the expected number of clusters from our previous analysis.</p>
 
 </div>
 
@@ -185,7 +186,7 @@ n = unique(c(n_i, which(mc[n_i, ] > 0, arr.ind = T)[, 2]))
 mc2 = mc[n, n]
 ```
 
-```{r fig.align = "center", fig.height = 4, fig.width = 6.5, echo = FALSE}
+```{r fig.align = "center", fig.height = 4, fig.width = 6.5, echo = TRUE}
 g_small = graph_from_adjacency_matrix(mc2, mode = "undirected", weighted = TRUE, diag = FALSE)
 g_layout = layout.fruchterman.reingold(g_small)
 plot.igraph(g_small, vertex.label = NA, layout = g_layout)
