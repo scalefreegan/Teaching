@@ -34,10 +34,10 @@ library(kernlab)
 
 ```{r message = FALSE}
 # data
-GITHUBDIR = "https://github.com/scalefreegan/Teaching/raw/master/DataIntegration/data/"
-load(url(paste(GITHUBDIR, "data.rda", sep = ""), method = "libcurl"))
-load(url(paste(GITHUBDIR, "kernel.rda", sep = ""), method = "libcurl"))
-load(url(paste(GITHUBDIR, "g_linkcomm.rda", sep = ""), method = "libcurl"))
+GITHUBDIR = "http://scalefreegan.github.io/Teaching/DataIntegration/data/"
+load(url(paste(GITHUBDIR, "data.rda", sep = "")))
+load(url(paste(GITHUBDIR, "kernel.rda", sep = "")))
+load(url(paste(GITHUBDIR, "g_linkcomm.rda", sep = "")))
 ```
 
 # Visualizing and Interpreting Link-community Clusters in R
