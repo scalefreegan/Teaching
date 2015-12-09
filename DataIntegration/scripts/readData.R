@@ -23,7 +23,7 @@ library(reshape2)
 
 # Dir infos ---------------------------------------------------
 FDIR = "https://oc.embl.de/index.php/s/qiOSCyvYRdxraRw/download?path=%2F&files="
-GITHUBDIR = "https://github.com/scalefreegan/Teaching/raw/master/DataIntegration/data/"
+GITHUBDIR = "http://scalefreegan.github.io/Teaching/DataIntegration/data/"
 
 # Read ---------------------------------------------------
 
@@ -104,7 +104,7 @@ if (!httr::url_success(f_data)) {
   data = readData(f_reduced, f_names)
 } else {
   # why not update?
-  load(url(f_data, method = "libcurl"))
+  load(url(f_data))
 }
 
 # Characterize data ---------------------------------------------------
