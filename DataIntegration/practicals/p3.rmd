@@ -38,8 +38,8 @@ library(kernlab)
 
 ```{r message = FALSE}
 # data
-GITHUBDIR = "https://github.com/scalefreegan/Teaching/raw/master/DataIntegration/data/"
-load(url(paste(GITHUBDIR, "kernel.rda", sep = ""), method = "libcurl"))
+GITHUBDIR = "http://scalefreegan.github.io/Teaching/DataIntegration/data/"
+load(url(paste(GITHUBDIR, "kernel.rda", sep = "")))
 ```
 
 ## Elbow method

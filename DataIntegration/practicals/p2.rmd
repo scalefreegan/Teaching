@@ -209,8 +209,8 @@ You may have noticed a parameter or two lurking around, for example the `n.neigh
 >
 
 ```{r }
-GITHUBDIR = "https://github.com/scalefreegan/Teaching/raw/master/DataIntegration/data/"
-load(url(paste(GITHUBDIR, "kernel.rda", sep = ""), method = "libcurl"))
+GITHUBDIR = "http://scalefreegan.github.io/Teaching/DataIntegration/data/"
+load(url(paste(GITHUBDIR, "kernel.rda", sep = "")))
 ```
 
 # Spectral Clustering: subset

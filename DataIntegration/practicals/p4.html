@@ -107,10 +107,10 @@ library(igraph)
 library(linkcomm)
 library(kernlab)</code></pre>
 <pre class="r"><code># data
-GITHUBDIR = &quot;https://github.com/scalefreegan/Teaching/raw/master/DataIntegration/data/&quot;
-load(url(paste(GITHUBDIR, &quot;data.rda&quot;, sep = &quot;&quot;), method = &quot;libcurl&quot;))
-load(url(paste(GITHUBDIR, &quot;kernel.rda&quot;, sep = &quot;&quot;), method = &quot;libcurl&quot;))
-load(url(paste(GITHUBDIR, &quot;g_linkcomm.rda&quot;, sep = &quot;&quot;), method = &quot;libcurl&quot;))</code></pre>
+GITHUBDIR = &quot;http://scalefreegan.github.io/Teaching/DataIntegration/data/&quot;
+load(url(paste(GITHUBDIR, &quot;data.rda&quot;, sep = &quot;&quot;)))
+load(url(paste(GITHUBDIR, &quot;kernel.rda&quot;, sep = &quot;&quot;)))
+load(url(paste(GITHUBDIR, &quot;g_linkcomm.rda&quot;, sep = &quot;&quot;)))</code></pre>
 <div id="visualizing-and-interpreting-link-community-clusters-in-r" class="section level1">
 <h1>Visualizing and Interpreting Link-community Clusters in R</h1>
 <p>Link-communities can provide a richly detailed decomposition of a complex network into structured (highly-connected) communities. However, it can also be more complicated to interpret the meaning of these communities since a given node can belong to multiple communities. Here we use several tools from the <code>linkcomm</code> R package to identify highly connected nodes and communities in network and visualize them. These basic tools will serve as a starting place to dive deeper into understanding the structure of these networks.</p>
