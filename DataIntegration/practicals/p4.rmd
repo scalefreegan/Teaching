@@ -64,6 +64,7 @@ $N$ is the number of communities to which $i$ belongs, $S(j,k)$ is the similarit
 <h5 class="ui-closed" style="color:blue">Solution</h5>
 ```{r eval = FALSE}
 cc <- getCommunityCentrality(g_linkcomm,  type = "commweight" )
+sort(cc, decreasing = T)[1:5]
 ```
 ```{r echo = FALSE, results = "hide"}
 cc <- getCommunityCentrality(g_linkcomm,  type = "commweight" )
@@ -92,10 +93,13 @@ plot(cc, degree(g)[names(cc)], xlab = "Community Centrality", ylab = "Degree")
 
 <div id='hint'>
 <h5 class="ui-closed" style="color:blue">Solution</h5>
-```{r  message = FALSE}
+```{r  message = FALSE, eval = FALSE}
+cm <- getCommunityConnectedness(g_linkcomm, conn = "modularity")
+sort(cm, decreasing = T)[1:5]
+```
+```{r echo = FALSE, results = "hide"}
 cm <- getCommunityConnectedness(g_linkcomm, conn = "modularity")
 ```
-
 ```{r echo = FALSE}
 kable(as.data.frame(t(sort(cm, decreasing = T)[1:5])), format = "markdown")
 ```

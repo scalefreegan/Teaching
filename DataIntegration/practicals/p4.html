@@ -128,7 +128,8 @@ load(url(paste(GITHUBDIR, &quot;g_linkcomm.rda&quot;, sep = &quot;&quot;)))</cod
 <h5 class="ui-closed" style="color:blue">
 Solution
 </h5>
-<pre class="r"><code>cc &lt;- getCommunityCentrality(g_linkcomm,  type = &quot;commweight&quot; )</code></pre>
+<pre class="r"><code>cc &lt;- getCommunityCentrality(g_linkcomm,  type = &quot;commweight&quot; )
+sort(cc, decreasing = T)[1:5]</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -165,7 +166,8 @@ Solution
 <h5 class="ui-closed" style="color:blue">
 Solution
 </h5>
-<pre class="r"><code>cm &lt;- getCommunityConnectedness(g_linkcomm, conn = &quot;modularity&quot;)</code></pre>
+<pre class="r"><code>cm &lt;- getCommunityConnectedness(g_linkcomm, conn = &quot;modularity&quot;)
+sort(cm, decreasing = T)[1:5]</code></pre>
 <table>
 <thead>
 <tr class="header">
