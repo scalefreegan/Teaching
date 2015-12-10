@@ -20,7 +20,7 @@ output:
 
 [Home](http://scalefreegan.github.io/Teaching/DataIntegration/)
 
-At the end of the previous session, we processed Jean-Karim's graph kernels, combining them into a single graph. In this session, we will apply two clustering techniques to the integrated data: spectral clustering and link-community clustering.
+At the end of the previous session, we processed Jean-Karim's kernels, combining them into a single graph. In this session, we will apply two clustering techniques to the integrated data: spectral clustering and link-community clustering.
 
 # Spirals: Spectral Clustering
 
@@ -202,7 +202,7 @@ plot(spirals, col=km$cluster, pch = 19, xlab = "", ylab = "")
 
 You may have noticed a parameter or two lurking around, for example the `n.neighboors` parameter in the k-nearest neighbors function. These parameters would need to be adjusted depending on the data or estimated automatically. In addition, it should be noted that there are several implementations of spectral clustering, using any of a number of different laplacians - you have just implemented a relatively simple version for the sake of clarity. For more detailed information, please refer to Ng et al. [On Spectral Clustering: Analysis and an algorithm](http://ai.stanford.edu/~ang/papers/nips01-spectral.pdf)
 
-# Load Graph Kernel Data
+# Load Kernel Data
 
 >
 > Load the combined kernel and graph produced in the preceding practical

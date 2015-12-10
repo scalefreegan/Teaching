@@ -172,7 +172,7 @@ We will return again to spectral clustering with more theoretical and practical 
 
 Before moving on to the next lecture, we will process Jean-Karim's similarity kernels so that they are ready for subsequent lectures.
 
-To remind you, Jean-Karim has provided us with several graph kernels that measure similarities between 120 human genes according to information derived from 5 sources. These sources include:
+To remind you, Jean-Karim has provided us with several kernels that measure similarities between 120 human genes according to information derived from 5 sources. These sources include:
 
 Type   | Description                                                                            | # Edges
 -------|----------------------------------------------------------------------------------------|----------------------------------
