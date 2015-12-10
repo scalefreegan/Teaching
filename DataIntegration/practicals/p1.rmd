@@ -244,6 +244,7 @@ normalizeKernel = function(K) {
 <div id='hint'>
 <h5 class="ui-closed" style="color:blue">Solution</h5>
 ```{r, eval=FALSE}
+library(rARPACK) # for function eigs, Thanks Jean-Karim!
 ms = lapply(colnames(data)[3:7], function(d){
   z = select(data, gene1, gene2, which(colnames(data)==d))
   z[is.na(z[,d]),d] = 0
@@ -252,8 +253,8 @@ ms = lapply(colnames(data)[3:7], function(d){
   m[cbind(z$gene1, z$gene2)] = z[,d]
   m[cbind(z$gene2, z$gene1)] = z[,d]
 
-  # calc eigenvalues
-  eigen_m = eigen(m)
+  # calc smales eigenvalue
+  eigen_m <- eigs(m,1,which="SR") # compute the smallest eigenvalue and corresponding eigenvector
 
   # make sure m is a valid kernel by adding
   # make matrix positive semi-definite
