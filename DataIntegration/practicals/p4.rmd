@@ -152,7 +152,7 @@ plot(g_linkcomm, type = "graph", shownodesin = 0, node.pies = TRUE, vlabel=F)
 
 ## Export network
 
-For the remainder of the course, Cytoscape will be used to extend our analysis of the integrated graph kernel network and the communities derived from it by link-community detection.
+For the remainder of the course, Cytoscape will be used to extend our analysis of the integrated kernel network and the communities derived from it by link-community detection.
 
 >
 > Export the graph and link community annotations to Cytoscape. For the purpose of this exercise only keep the edges that are assigned to a community by link community clustering.
